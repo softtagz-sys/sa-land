@@ -1,0 +1,11 @@
+### POST Request for entry Passage
+POST localhost:8080/api/passages
+Content-Type: application/json
+Accept: application/json
+
+{
+  "licensePlate": "OMV-727",
+  "arrivalTime": "2024-10-12T18:12:00"
+}
+
+###
