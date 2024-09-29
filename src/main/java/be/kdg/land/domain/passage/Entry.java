@@ -1,12 +1,10 @@
 package be.kdg.land.domain.passage;
 
-import be.kdg.land.domain.Truck;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.MappedSuperclass;
+import lombok.RequiredArgsConstructor;
 
-public class Entry extends Passage {
+@MappedSuperclass
+public abstract class Entry extends Passage {
 
-    public Entry(LocalDateTime timeStamp, Gate gate, Truck truck) {
-        super(timeStamp, gate, truck);
-    }
 }
