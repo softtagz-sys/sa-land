@@ -26,6 +26,15 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     )
     List<Appointment> findBySlot(@Param("slotTime") LocalDateTime slot);
 
+    @Query(
+            value = """
+            SELECT a
+            FROM Appointment a
+            WHERE a.licensePlate = :licensePlate
+            """
+    )
+    List<Appointment> findByLicensePlate(String licensePlate);
+
 
 
 }

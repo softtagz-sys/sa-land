@@ -9,8 +9,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
+
 //@NoArgsConstructor
-@RequiredArgsConstructor
+
 @Entity
 @DiscriminatorValue("SCHEDULED_ENTRY")
 public class ScheduledEntry extends Entry {
@@ -19,4 +21,11 @@ public class ScheduledEntry extends Entry {
     @OneToOne
     private Appointment appointment;
 
+    public ScheduledEntry() {
+    }
+
+    public ScheduledEntry(LocalDateTime timeStamp, String licensePlate, Appointment appointment) {
+        super(timeStamp, licensePlate);
+        this.appointment = appointment;
+    }
 }

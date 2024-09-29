@@ -11,12 +11,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
-@RequiredArgsConstructor
-//@NoArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "passage_type")
-//Entity@Table (name = "passages")
+@Table (name = "passages")
 public class Passage {
 
     @Id
@@ -29,4 +27,11 @@ public class Passage {
     @NotBlank(message = "A passage must have a licenseplate")
     private String licensePlate;
 
+    public Passage() {
+    }
+
+    public Passage(LocalDateTime timeStamp, String licensePlate) {
+        this.timeStamp = timeStamp;
+        this.licensePlate = licensePlate;
+    }
 }
