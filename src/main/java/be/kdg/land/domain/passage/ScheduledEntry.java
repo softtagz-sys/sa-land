@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
-//@NoArgsConstructor
 
 @Entity
 @DiscriminatorValue("SCHEDULED_ENTRY")

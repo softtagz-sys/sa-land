@@ -1,11 +1,9 @@
 package be.kdg.land.domain.passage;
 
-
-import jakarta.persistence.MappedSuperclass;
-
+import jakarta.persistence.Entity;
 import java.time.LocalDateTime;
 
-@MappedSuperclass
+@Entity
 public abstract class Entry extends Passage {
 
     public Entry() {

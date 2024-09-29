@@ -1,5 +1,6 @@
 package be.kdg.land.service;
 
+import be.kdg.land.domain.PayloadDelivery;
 import be.kdg.land.domain.appointment.Appointment;
 import be.kdg.land.domain.passage.Exit;
 import be.kdg.land.domain.passage.Passage;
@@ -20,6 +21,9 @@ import java.util.Optional;
 
 @Service
 public class PassageService {
+
+    private final PayloadDeliveryService payloadDeliveryService;
+
     private final AppointmentRepository appointmentRepository;
     private final PassageRepository passageRepository;
     private final WaitlistTruckRepository waitlistTruckRepository;
@@ -35,7 +39,8 @@ public class PassageService {
     @Value("${app.appointmentsEndHour}")
     private int appointmentsEndHour;
 
-    public PassageService(AppointmentRepository appointmentRepository, PassageRepository passageRepository, WaitlistTruckRepository waitlistTruckRepository) {
+    public PassageService(PayloadDeliveryService payloadDeliveryService, AppointmentRepository appointmentRepository, PassageRepository passageRepository, WaitlistTruckRepository waitlistTruckRepository) {
+        this.payloadDeliveryService = payloadDeliveryService;
         this.appointmentRepository = appointmentRepository;
         this.passageRepository = passageRepository;
         this.waitlistTruckRepository = waitlistTruckRepository;
@@ -57,10 +62,14 @@ public class PassageService {
             Optional<Appointment> appointment = FindValidAppointment(licensePlate, arrivalTime);
             if (appointment.isPresent()) {
 
-                passageRepository.save(new ScheduledEntry(arrivalTime, licensePlate, appointment.get()));
+                ScheduledEntry entry = passageRepository.save(new ScheduledEntry(arrivalTime, licensePlate, appointment.get()));
+
+                PayloadDelivery newPd = payloadDeliveryService.addPayloadDeliveryOnEntry(appointment.get().getCustomer(), appointment.get().getRawMaterial(), licensePlate, entry);
+
+
                 logger.info(String.format("The gate opened and %s was allowed IN.", licensePlate));
 
-                return "You may enter the facility and proceed to the weighbridge.";
+                return String.format("You may enter the facility and proceed to weighbridge: %s", newPd.getEntryWeighing().getWeighBridge());
             }
         }
 
