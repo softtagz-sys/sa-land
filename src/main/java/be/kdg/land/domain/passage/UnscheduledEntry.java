@@ -5,10 +5,17 @@ import jakarta.persistence.Entity;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 
-//@NoArgsConstructor
-@RequiredArgsConstructor
+
 @Entity
 @DiscriminatorValue("UNSCHEDULED_ENTRY")
 public class UnscheduledEntry extends Entry {
+
+    public UnscheduledEntry() {
+    }
+
+    public UnscheduledEntry(LocalDateTime timeStamp, String licensePlate) {
+        super(timeStamp, licensePlate);
+    }
 }

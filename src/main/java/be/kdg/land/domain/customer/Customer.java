@@ -1,9 +1,11 @@
 package be.kdg.land.domain.customer;
 
+import be.kdg.land.domain.Warehouse;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -22,6 +24,9 @@ public class Customer {
 
     @NotBlank(message = "A customer must have an address")
     private String address;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Warehouse> warehouses;
 
     public Customer() {
     }

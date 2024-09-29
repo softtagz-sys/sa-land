@@ -1,24 +1,41 @@
-//package be.kdg.land.domain.weighment;
-//
-//import be.kdg.land.domain.Truck;
-//
-//import java.time.LocalDateTime;
-//import java.util.UUID;
-//
-//
-//public class Weighing {
-//
-//    private final UUID weighingId;
-//    private final LocalDateTime timestamp;
-//    private final double weight;
-//    private final WeighBridge weighBridge;
-//    private final Truck truck;
-//
-//    public Weighing(UUID weighingId, LocalDateTime timestamp, double weight, WeighBridge weighBridge, Truck truck) {
-//        this.weighingId = weighingId;
-//        this.timestamp = timestamp;
-//        this.weight = weight;
-//        this.weighBridge = weighBridge;
-//        this.truck = truck;
-//    }
-//}
+package be.kdg.land.domain.weighment;
+
+import be.kdg.land.domain.PayloadDelivery;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Getter
+@Entity
+@Table(name = "weighings")
+public class Weighing {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID weighingId;
+
+    @Setter
+    private LocalDateTime timestamp;
+
+    @Setter
+    private double weight;
+
+    private String weighBridge;
+
+    private String LicensePlate;
+
+    @ManyToOne()
+    private PayloadDelivery payloadDelivery;
+
+    public Weighing() {
+    }
+
+    public Weighing(String weighBridge, String licensePlate) {
+        this.weighBridge = weighBridge;
+        LicensePlate = licensePlate;
+    }
+}

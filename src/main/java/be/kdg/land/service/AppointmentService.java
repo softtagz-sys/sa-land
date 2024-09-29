@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -22,6 +23,7 @@ public class AppointmentService {
 
     @Value("${app.maxAmountOfAppointmentsPerSlot}")
     private int maxAmountOfAppointmentsPerSlot;
+
 
     public AppointmentService(AppointmentRepository appointmentRepository, Validator validator) {
         this.appointmentRepository = appointmentRepository;
@@ -55,6 +57,8 @@ public class AppointmentService {
             throw new IllegalStateException("Max amount of appointment per slot has been reached");
         }
     }
+
+
 
 
 }
