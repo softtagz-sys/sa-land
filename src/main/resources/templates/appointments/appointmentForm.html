@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>KdG - Add Appointment</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</head>
+
+<body class="bg-light">
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Krystal Distribution Group</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/add-appointments">Add Appointments</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Appointment Form Section -->
+<div class="container mt-5">
+    <h2 class="text-center">Add an Appointment</h2>
+    <form action="/add-appointment" method="POST" th:object="${new_appointment}">
+
+        <div class="form-group mb-3">
+            <label for="customerName">Customer Name</label>
+            <input type="text" class="form-control" id="customerName" placeholder="Enter Customer Name"
+                   th:field="*{customerName}" required>
+            <div th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}"></div>
+            <div th:if="${customerNotFound}" style="color: red;">
+                <p th:text="${customerNotFound}"></p>
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="slot">Requested Slot</label>
+            <input type="datetime-local" class="form-control" id="slot" th:field="*{slot}" required>
+            <div th:if="${#fields.hasErrors('slot')}" th:errors="*{slot}"></div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="rawMaterial">Raw Material</label>
+            <input type="text" class="form-control" id="rawMaterial" placeholder="Enter Raw Material"
+                   th:field="*{rawMaterial}" required>
+            <div th:if="${#fields.hasErrors('rawMaterial')}" th:errors="*{rawMaterial}"></div>
+            <div th:if="${rawMaterialNotFound}" style="color: red;">
+                <p th:text="${rawMaterialNotFound}"></p>
+            </div>
+
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="licensePlate">License Plate</label>
+            <input type="text" class="form-control" id="licensePlate" placeholder="Enter License Plate"
+                   th:field="*{licensePlate}" required>
+            <div th:if="${#fields.hasErrors('licensePlate')}" th:errors="*{licensePlate}"></div>
+        </div>
+
+        <div th:if="${appointmentLogicError}" style="color: red;">
+            <p th:text="${appointmentLogicError}"></p>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg mt-4">Submit Appointment</button>
+    </form>
+</div>
+
+<footer class="bg-dark text-white text-center py-4 mt-5">
+    <p>&copy; 2024 Krystal Distribution Group. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

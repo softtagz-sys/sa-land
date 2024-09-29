@@ -1,11 +1,14 @@
 package be.kdg.land.domain.passage;
 
-import be.kdg.land.domain.Truck;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
 
+//@NoArgsConstructor
+@RequiredArgsConstructor
+@Entity
+@DiscriminatorValue("UNSCHEDULED_ENTRY")
 public class UnscheduledEntry extends Entry {
-    public UnscheduledEntry(LocalDateTime timeStamp, Gate gate, Truck truck) {
-        super(timeStamp, gate, truck);
-    }
 }

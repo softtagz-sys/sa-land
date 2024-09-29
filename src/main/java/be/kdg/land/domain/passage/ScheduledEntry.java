@@ -1,16 +1,22 @@
 package be.kdg.land.domain.passage;
 
-import be.kdg.land.domain.Truck;
+
 import be.kdg.land.domain.appointment.Appointment;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotNull;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
-
+//@NoArgsConstructor
+@RequiredArgsConstructor
+@Entity
+@DiscriminatorValue("SCHEDULED_ENTRY")
 public class ScheduledEntry extends Entry {
 
-    private final Appointment appointment;
+    @NotNull(message = "You can only enter if you provide an appointment")
+    @OneToOne
+    private Appointment appointment;
 
-    public ScheduledEntry(LocalDateTime timeStamp, Gate gate, Truck truck, Appointment appointment) {
-        super(timeStamp, gate, truck);
-        this.appointment = appointment;
-    }
 }
