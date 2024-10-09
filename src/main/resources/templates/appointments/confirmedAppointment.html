@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmed Appointment</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-black-30 text-white">
+            <h2 th:text="'Confirmed ' + ${appointmentType} + ' Details'"></h2>
+        </div>
+        <div class="card-body">
+            <form>
+                <div class="mb-3">
+                    <label for="customerName" class="form-label">Customer Name</label>
+                    <input type="text" id="customerName" class="form-control"
+                           th:value="${confirmedAppointment.customerName}" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label for="rawMaterial" class="form-label">Raw Material</label>
+                    <input type="text" id="rawMaterial" class="form-control"
+                           th:value="${confirmedAppointment.rawMaterial}" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label for="registrationTime" class="form-label">Registration Time</label>
+                    <input type="text" id="registrationTime" class="form-control"
+                           th:value="${confirmedAppointment.slot}"
+                           readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label for="licensePlate" class="form-label">License Plate</label>
+                    <input type="text" id="licensePlate" class="form-control"
+                           th:value="${confirmedAppointment.licensePlate}" readonly>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer text-end">
+            <a href="/" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

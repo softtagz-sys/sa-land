@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @DiscriminatorValue("EXIT")
 public class Exit extends Passage {
     public Exit() {
+        super();
     }
 
     public Exit(LocalDateTime timeStamp, String licensePlate) {

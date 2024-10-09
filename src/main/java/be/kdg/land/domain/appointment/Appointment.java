@@ -2,17 +2,15 @@ package be.kdg.land.domain.appointment;
 
 import be.kdg.land.domain.RawMaterial;
 import be.kdg.land.domain.customer.Customer;
-import be.kdg.land.domain.validators.ValidSlot;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@NoArgsConstructor
 @Getter
 @Entity
 @Table(name = "appointments")
@@ -23,24 +21,33 @@ public class Appointment {
     private UUID appointmentId;
 
     @ManyToOne
-    @NotNull(message = "An appointment must be assigned to a customer.")
+    @NotNull
     private Customer customer;
 
-    @ValidSlot
-    @NotNull(message = "You must provide a appointment time.")
+
+    @NotNull
     private LocalDateTime slot;
 
     @ManyToOne
-    @NotNull(message = "You must provide a raw material type.")
+    @NotNull
     private RawMaterial rawMaterial;
 
-    @NotBlank(message = "A license plate must be provided to gain access to the facility")
+    @NotBlank
     private String licensePlate;
 
-    public Appointment(Customer customer, LocalDateTime slot, RawMaterial rawMaterial, String licensePlate) {
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AppointmentType appointmentType;
+
+
+    public Appointment() {
+    }
+
+    public Appointment(Customer customer, LocalDateTime slot, RawMaterial rawMaterial, String licensePlate, AppointmentType appointmentType) {
         this.customer = customer;
         this.slot = slot;
         this.rawMaterial = rawMaterial;
         this.licensePlate = licensePlate;
+        this.appointmentType = appointmentType;
     }
 }

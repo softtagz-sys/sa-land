@@ -19,10 +19,10 @@ public class Customer {
     private UUID customerId;
 
     @Column(unique = true)
-    @NotBlank(message = "A customer must have a name")
+    @NotBlank
     private String name;
 
-    @NotBlank(message = "A customer must have an address")
+    @NotBlank
     private String address;
 
     @OneToMany(mappedBy = "customer")

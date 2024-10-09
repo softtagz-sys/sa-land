@@ -18,15 +18,15 @@ public class RawMaterial {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID rawMaterialId;
 
-    @NotBlank(message = "A raw material type must have a name")
+    @NotBlank
     @Column(unique = true)
     private String name;
 
-    @NotBlank(message = "A raw material type must have a description")
-    @Column(columnDefinition = "TEXT")
+    @NotBlank
+    @Column(columnDefinition = "TEXT") // Necessary for varchar > 255
     private String description;
 
-    @OneToMany(mappedBy = "rawMaterial", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "rawMaterial")
     private List<Warehouse> warehouses;
 
     public RawMaterial() {

@@ -15,7 +15,11 @@ public class LandApplicationConfig {
     private int slotDuration;
     private int appointmentsStartHour;
     private int appointmentsEndHour;
+    private int maxAmountOfWaitingQueueAppointmentsPerSlot;
+
     private double weighbridgeLowerLimit;
     private double weighbridgeUpperLimit;
     private String weighbridgeName;
+
+    private String landWebsite;
 }
