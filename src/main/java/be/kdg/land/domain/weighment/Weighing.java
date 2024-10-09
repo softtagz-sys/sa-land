@@ -2,6 +2,7 @@ package be.kdg.land.domain.weighment;
 
 import be.kdg.land.domain.PayloadDelivery;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,11 +25,13 @@ public class Weighing {
     @Setter
     private double weight;
 
+    @NotBlank
     private String weighBridge;
 
+    @NotBlank
     private String LicensePlate;
 
-    @ManyToOne()
+    @ManyToOne
     private PayloadDelivery payloadDelivery;
 
     public Weighing() {

@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -21,10 +19,10 @@ public class Passage {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID passageId;
 
-    @NotNull(message = "A passage must have a timestamp")
+    @NotNull
     private LocalDateTime timeStamp;
 
-    @NotBlank(message = "A passage must have a licenseplate")
+    @NotBlank
     private String licensePlate;
 
     public Passage() {

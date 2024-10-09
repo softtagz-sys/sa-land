@@ -1,107 +1,68 @@
 package be.kdg.land.service;
 
+import be.kdg.land.LandApplicationConfig;
 import be.kdg.land.domain.PayloadDelivery;
 import be.kdg.land.domain.appointment.Appointment;
+import be.kdg.land.domain.passage.Entry;
 import be.kdg.land.domain.passage.Exit;
 import be.kdg.land.domain.passage.Passage;
-import be.kdg.land.domain.passage.ScheduledEntry;
-import be.kdg.land.domain.waitlist.TruckOnWaitlist;
-import be.kdg.land.repository.AppointmentRepository;
 import be.kdg.land.repository.PassageRepository;
-import be.kdg.land.repository.WaitlistTruckRepository;
+import be.kdg.land.service.exceptions.NoValidAppointmentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class PassageService {
 
-    private final PayloadDeliveryService payloadDeliveryService;
+    @Autowired private PayloadDeliveryService payloadDeliveryService;
+    @Autowired private AppointmentService appointmentService;
 
-    private final AppointmentRepository appointmentRepository;
-    private final PassageRepository passageRepository;
-    private final WaitlistTruckRepository waitlistTruckRepository;
+    @Autowired private PassageRepository passageRepository;
+
+    @Autowired private LandApplicationConfig config;
 
     Logger logger = LoggerFactory.getLogger(PassageService.class);
 
-    @Value("${app.slotDuration}")
-    private int slotDuration;
-
-    @Value("${app.appointmentsStartHour}")
-    private int appointmentsStartHour;
-
-    @Value("${app.appointmentsEndHour}")
-    private int appointmentsEndHour;
-
-    public PassageService(PayloadDeliveryService payloadDeliveryService, AppointmentRepository appointmentRepository, PassageRepository passageRepository, WaitlistTruckRepository waitlistTruckRepository) {
-        this.payloadDeliveryService = payloadDeliveryService;
-        this.appointmentRepository = appointmentRepository;
-        this.passageRepository = passageRepository;
-        this.waitlistTruckRepository = waitlistTruckRepository;
-    }
 
     public String truckAtGate(String licensePlate, LocalDateTime arrivalTime) {
         List<Passage> passages = passageRepository.findAllByLicensePlate(licensePlate);
 
         if (passages.size() % 2 == 1) { // Truck is in facility
-            return Exit(licensePlate, arrivalTime);
-        }
-        else {
-            return Entry(licensePlate, arrivalTime);
+            return exitFacility(licensePlate, arrivalTime);
+        } else {
+            return enterFacility(licensePlate, arrivalTime);
         }
     }
 
-    private String Entry(String licensePlate, LocalDateTime arrivalTime) {
-        if (arrivalTime.getHour() > appointmentsStartHour && arrivalTime.getHour() < appointmentsEndHour) {
-            Optional<Appointment> appointment = FindValidAppointment(licensePlate, arrivalTime);
-            if (appointment.isPresent()) {
+    private String enterFacility(String licensePlate, LocalDateTime arrivalTime) {
 
-                ScheduledEntry entry = passageRepository.save(new ScheduledEntry(arrivalTime, licensePlate, appointment.get()));
-
-                PayloadDelivery newPd = payloadDeliveryService.addPayloadDeliveryOnEntry(appointment.get().getCustomer(), appointment.get().getRawMaterial(), licensePlate, entry);
-
-
-                logger.info(String.format("The gate opened and %s was allowed IN.", licensePlate));
-
-                return String.format("You may enter the facility and proceed to weighbridge: %s", newPd.getEntryWeighing().getWeighBridge());
-            }
+        Optional<Appointment> appointment = appointmentService.findValidAppointment(licensePlate, arrivalTime);
+        if (appointment.isEmpty()) {
+            throw new NoValidAppointmentException(licensePlate);
         }
 
-        return AddTruckToQueue(licensePlate, arrivalTime);
+        // TODO check if validation is necessary
+        Entry entry = passageRepository.save(new Entry(arrivalTime, licensePlate, appointment.get()));
+
+        PayloadDelivery newPd = payloadDeliveryService.addPayloadDeliveryOnEntry(appointment.get().getCustomer(), appointment.get().getRawMaterial(), licensePlate, entry);
+
+        logger.info(String.format("The gate opened and %s was allowed IN.", licensePlate));
+
+        return String.format("You may enter the facility and proceed to weighbridge: %s", newPd.getEntryWeighing().getWeighBridge());
     }
 
-    private String Exit(String licensePlate, LocalDateTime exitTime) {
+    private String exitFacility(String licensePlate, LocalDateTime exitTime) {
 
         Exit newExit = new Exit(exitTime, licensePlate);
-
+        // TODO check if validation is necessary
         passageRepository.save(newExit);
         logger.info(String.format("The gate opened and %s was allowed OUT.", licensePlate));
         return "Bye!";
-    }
-
-
-    private String AddTruckToQueue(String licensePlate, LocalDateTime arrivalTime) {
-        TruckOnWaitlist newTruckOnWaitlist = new TruckOnWaitlist(licensePlate, arrivalTime);
-        waitlistTruckRepository.save(newTruckOnWaitlist);
-
-        return "You have been placed in the queue!";
-    }
-
-    private Optional<Appointment> FindValidAppointment(String licensePlate, LocalDateTime arrivalTime) {
-
-        List<Appointment> appointments = this.appointmentRepository.findByLicensePlate(licensePlate);
-
-        return appointments.stream().filter(a -> IsInSlot(a.getSlot(), arrivalTime)).findAny();
-
-    }
-
-    private boolean IsInSlot(LocalDateTime slot, LocalDateTime arrivalTime) {
-        return arrivalTime.isAfter(slot.minusSeconds(1)) && arrivalTime.isBefore(slot.plusMinutes(slotDuration));
     }
 }

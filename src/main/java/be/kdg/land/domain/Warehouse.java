@@ -18,11 +18,11 @@ public class Warehouse {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID warehouseId;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @NotNull
     private Customer customer;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @NotNull
     private RawMaterial rawMaterial;
 

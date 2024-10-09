@@ -6,7 +6,6 @@ import be.kdg.land.domain.customer.Customer;
 import be.kdg.land.repository.AppointmentRepository;
 import be.kdg.land.repository.CustomerRepository;
 import be.kdg.land.repository.RawMaterialRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,14 +29,14 @@ class AppointmentServiceTest {
 
 
     @Test
-    public void testAddValidAppointment() {
+    public void testAddAppointmentValidAppointment() {
 
         Customer customer = customerRepository.getReferenceById(UUID.fromString("9ae35800-5fdf-4932-a713-251f49e11012"));
         RawMaterial rawMaterial = rawMaterialRepository.getReferenceById(UUID.fromString("59c1088e-df7d-4a6e-be9d-352d1d50ec44"));
         LocalDateTime slot = LocalDateTime.of(2024, 10, 1, 9, 0);
         String licensePlate = "1-AAA-001";
 
-        Optional<Appointment> result = appointmentService.add(customer, slot, rawMaterial, licensePlate);
+        Optional<Appointment> result = appointmentService.addAppointment(customer, slot, rawMaterial, licensePlate);
 
         // Assert that the appointment was saved successfully
         assertTrue(result.isPresent());
