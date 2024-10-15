@@ -1,0 +1,22 @@
+### VALID POST Request for entry Passage
+POST localhost:8080/api/passages
+Content-Type: application/json
+Accept: application/json
+
+{
+  "licensePlate": "1-TVI-848",
+  "arrivalTime": "2024-10-01T08:11:00",
+  "incoming": true
+}
+
+###
+POST http://localhost:15672/api/exchanges/%2F/warehouse-exchange/publish
+Authorization: Basic user password
+Content-Type: application/json
+
+{
+  "properties": {},
+  "routing_key": "weighbridge.test",
+  "payload": "{\"licensePlate\":\"1-TVI-848\",\"timestamp\":\"2024-10-01T08:11:30\",\"weight\":\"15.1\"}",
+  "payload_encoding": "string"
+}

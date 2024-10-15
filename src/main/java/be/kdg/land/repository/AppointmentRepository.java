@@ -1,6 +1,7 @@
 package be.kdg.land.repository;
 
 import be.kdg.land.domain.appointment.Appointment;
+import be.kdg.land.domain.appointment.AppointmentType;
 import be.kdg.land.repository.dto.AppointmentCountPerHour;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,8 +32,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     List<Appointment> findByLicensePlate(String licensePlate);
 
 
-
-
     @Query(
         value = """
         SELECT new be.kdg.land.repository.dto.AppointmentCountPerHour(a.slot, count(a.appointmentId))
@@ -42,5 +41,24 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
         """)
     List<AppointmentCountPerHour> CountAppointmentsPerSlot(LocalDateTime fromTime);
 
-    //TODO fromtime toevoegen
+    @Query(
+            """
+            SELECT a
+            FROM Appointment a
+            WHERE a.slot >= :fromTime and a.slot < :toTime
+            AND a.appointmentType = :type
+            """
+    )
+    List<Appointment> findApppointmentsInSlotWithType(LocalDateTime fromTime, LocalDateTime toTime, AppointmentType type);
+
+    @Query(
+            """
+            SELECT a
+            FROM Appointment a
+            WHERE a.slot >= :fromTime
+            AND a.appointmentType = :type
+            """
+    )
+    List<Appointment> findAppointmentsAfterSlotWithType(LocalDateTime fromTime, AppointmentType type);
+
 }

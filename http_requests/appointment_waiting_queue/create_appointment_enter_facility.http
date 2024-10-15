@@ -1,0 +1,17 @@
+### VALID POST Create Appointment
+POST localhost:8080/add-appointment HTTP/1.1
+Host: localhost
+Content-Type: application/x-www-form-urlencoded
+
+customerName=Desmet+NV&slot=2024-10-30T14%3A00&rawMaterial=Gips&licensePlate=1-FOX-999
+
+### VALID POST Request for entry Passage
+POST localhost:8080/api/passages
+Content-Type: application/json
+Accept: application/json
+
+{
+  "licensePlate": "1-FOX-999",
+  "arrivalTime": "2024-10-30T14:12:00",
+  "incoming": true
+}

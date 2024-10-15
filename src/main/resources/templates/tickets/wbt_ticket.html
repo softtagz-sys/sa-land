@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"></meta>
+  <title>WBT</title>
+</head>
+<body>
+<h1>Weight Bridge Ticket</h1>
+<table class="table">
+  <tbody>
+  <tr>
+    <th scope="row">PayLoadDeliveryId</th>
+    <td th:text="${wbt.payloadDeliveryId}"></td>
+  </tr>
+  <tr>
+    <th scope="row">Gross Weight</th>
+    <td th:text="${wbt.grossWeightAtArrival}"></td>
+  </tr>
+  <tr>
+    <th scope="row">Tare Weight</th>
+    <td th:text="${wbt.tareWeight}"></td>
+  </tr>
+  <tr>
+    <th scope="row">Net Weight</th>
+    <td th:text="${wbt.netWeight}"></td>
+  </tr>
+  <tr>
+    <th scope="row">Timestamp</th>
+    <td th:text="${#temporals.format(wbt.timestamp, 'dd-MM-yyyy')}"></td>
+  </tr>
+  <tr>
+    <th scope="row">LicensePlate</th>
+    <td th:text="${wbt.licensePlate}"></td>
+  </tr>
+  </tbody>
+
+</table>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"></meta>
+  <title>PDT</title>
+</head>
+<body>
+<h1>Payload Delivery Ticket</h1>
+<table class="table">
+  <tbody>
+  <tr>
+    <th scope="row">PayLoadDeliveryId</th>
+    <td th:text="${pdt.payloadDeliveryTicketId}"></td>
+  </tr>
+  <tr>
+    <th scope="row">Warehouse</th>
+    <td th:text="${pdt.warehouseId}"></td>
+  </tr>
+  <tr>
+    <th scope="row">Raw Material</th>
+    <td th:text="${pdt.rawMaterial}"></td>
+  </tr>
+  <tr>
+    <th scope="row">Timestamp</th>
+    <td th:text="${#temporals.format(pdt.deliveryTime, 'dd-MM-yyyy')}"></td>
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

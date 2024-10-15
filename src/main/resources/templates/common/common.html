@@ -1,0 +1,45 @@
+<!-- common.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Navigation Bar -->
+<nav th:fragment="nav" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">Krystal Distribution Group</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/add-appointment">Add An Appointment</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/add-to-waitingqueue">Add to Waiting Queue</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/get-directions">Find your way</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/get-tickets">Tickets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/get-arrivals">Arrivals</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/get-queue">Queue Status</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Footer fragment -->
+
+<footer th:fragment="footer" class="bg-dark text-white text-center py-4 mt-5">
+    <p>&copy; 2024 Krystal Distribution Group. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

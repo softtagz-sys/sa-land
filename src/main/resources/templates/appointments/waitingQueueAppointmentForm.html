@@ -9,22 +9,7 @@
 
 <body class="bg-light">
 
-<!-- Navigation Bar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="/">Krystal Distribution Group</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/add-appointments">Add Appointments</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<div th:replace="~{common/common :: nav}"></div>
 
 <!-- Appointment Form Section -->
 <div class="container mt-5">
@@ -54,8 +39,18 @@
 
         </div>
 
-        <input type="hidden" th:field="*{licensePlate}" />
-        <input type="hidden" th:field="*{simulatedTimeOfRegistration}" />
+        <div class="form-group mb-3">
+            <label for="licensePlate">License Plate</label>
+            <input type="text" class="form-control" id="licensePlate" placeholder="Enter License Plate"
+                   th:field="*{licensePlate}" required>
+            <div th:if="${#fields.hasErrors('licensePlate')}" th:errors="*{licensePlate}"></div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="slot">Simulated Time of Arrival - TESTING</label>
+            <input type="datetime-local" class="form-control" id="slot" th:field="*{simulatedTimeOfRegistration}" required>
+            <div th:if="${#fields.hasErrors('simulatedTimeOfRegistration')}" th:errors="*{simulatedTimeOfRegistration}"></div>
+        </div>
 
 
         <div th:if="${appointmentLogicError}" style="color: red;">
@@ -68,9 +63,8 @@
     </form>
 </div>
 
-<footer class="bg-dark text-white text-center py-4 mt-5">
-    <p>&copy; 2024 Krystal Distribution Group. All rights reserved.</p>
-</footer>
+<div th:replace="~{common/common :: footer}"></div>
 
 </body>
+
 </html>

@@ -1,4 +1,4 @@
-package be.kdg.land.controller.dto;
+package be.kdg.land.controller.dto.in_out;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;

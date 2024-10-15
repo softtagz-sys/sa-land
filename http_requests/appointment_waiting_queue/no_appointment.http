@@ -1,0 +1,115 @@
+### VALID POST Request for entry Passage -- Outside of Business Hours
+POST localhost:8080/api/passages
+Content-Type: application/json
+Accept: application/json
+
+{
+  "licensePlate": "FPQ-520",
+  "arrivalTime": "2024-10-16T07:01:00",
+  "incoming": true
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 303, "Response status is not 303 SEE OTHER");
+    });
+
+%}
+
+
+### VALID POST Request for add to WAITING QUEUE - NO 9
+POST localhost:8080/add-to-waitingqueue HTTP/1.1
+Host: localhost
+Content-Type: application/x-www-form-urlencoded
+
+
+customerName=Vos%2C+Poppe+en+Peeters+CV&rawMaterial=Gips&licensePlate=FPQ-520&simulatedTimeOfRegistration=2024-10-16T07%3A07
+
+### VALID POST Request for entry Passage
+POST localhost:8080/api/passages
+Content-Type: application/json
+Accept: application/json
+
+{
+  "licensePlate": "FPQ-520",
+  "arrivalTime": "2024-10-16T07:09:00",
+  "incoming": true
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201: PASSAGE NOT GRANTED");
+    });
+
+%}
+
+
+### VALID POST Request for add to WAITING QUEUE - NO 10
+POST localhost:8080/add-to-waitingqueue HTTP/1.1
+Host: localhost
+Content-Type: application/x-www-form-urlencoded
+
+
+customerName=Vos%2C+Poppe+en+Peeters+CV&rawMaterial=Gips&licensePlate=FPQ-521&simulatedTimeOfRegistration=2024-10-16T07%3A09
+
+### VALID POST Request for entry Passage
+POST localhost:8080/api/passages
+Content-Type: application/json
+Accept: application/json
+
+{
+  "licensePlate": "FPQ-521",
+  "arrivalTime": "2024-10-16T07:10:00",
+  "incoming": true
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201: PASSAGE NOT GRANTED");
+    });
+
+%}
+
+### VALID POST Request for add to WAITING QUEUE - NO 11
+POST localhost:8080/add-to-waitingqueue HTTP/1.1
+Host: localhost
+Content-Type: application/x-www-form-urlencoded
+
+
+customerName=Vos%2C+Poppe+en+Peeters+CV&rawMaterial=Gips&licensePlate=FPQ-522&simulatedTimeOfRegistration=2024-10-16T07%3A10
+
+### VALID POST Request for entry Passage
+POST localhost:8080/api/passages
+Content-Type: application/json
+Accept: application/json
+
+{
+  "licensePlate": "FPQ-521",
+  "arrivalTime": "2024-10-16T07:11:00",
+  "incoming": true
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 303, "Response status is not 303");
+    });
+
+%}
+
+### VALID POST Request for entry Passage
+POST localhost:8080/api/passages
+Content-Type: application/json
+Accept: application/json
+
+{
+  "licensePlate": "FPQ-521",
+  "arrivalTime": "2024-10-16T20:11:00",
+  "incoming": true
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+    });
+
+%}

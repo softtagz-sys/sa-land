@@ -31,11 +31,8 @@ public class AppointmentService {
 
         Appointment appointment = new Appointment(customer, slot, rawMaterial, licensePlate, AppointmentType.APPOINTMENT);
 
-        try {
-            return Optional.of(this.appointmentRepository.save(appointment));
-        } catch (DataIntegrityViolationException e) {
-            return Optional.empty();
-        }
+        return Optional.of(this.appointmentRepository.save(appointment));
+
     }
 
     public Optional<Appointment> addToWaitingQueue(Customer customer, RawMaterial rawMaterial, String licensePlate, LocalDateTime simulatedTimeOfRegistration) {
@@ -45,17 +42,14 @@ public class AppointmentService {
 
         Appointment appointment = new Appointment(customer, slot, rawMaterial, licensePlate, AppointmentType.WAITING_QUEUE);
 
-        try {
-            return Optional.of(this.appointmentRepository.save(appointment));
-        } catch (DataIntegrityViolationException e) {
-            return Optional.empty();
-        }
+        return Optional.of(this.appointmentRepository.save(appointment));
+
     }
 
     private LocalDateTime findFirstFreeOutOfHoursSlot(LocalDateTime simulatedTimeOfRegistration) {
         LocalDateTime firstFreeSlot = null;
         LocalDateTime firstPossibleSlot = simulatedTimeOfRegistration.truncatedTo(ChronoUnit.HOURS);
-        List<AppointmentCountPerHour> slots = appointmentRepository.CountAppointmentsPerSlot(simulatedTimeOfRegistration);
+        List<AppointmentCountPerHour> slots = appointmentRepository.CountAppointmentsPerSlot(firstPossibleSlot);
 
         while(firstFreeSlot == null) {
 
@@ -64,7 +58,8 @@ public class AppointmentService {
             boolean afterAppointments = currentTargetTime.getHour() >= config.getAppointmentsEndHour();
             boolean beforeAppointments = currentTargetTime.getHour() < config.getAppointmentsStartHour();
 
-            boolean slotFree = slots.stream().filter(slot -> slot.getSlot().equals(currentTargetTime))
+            boolean slotFree = slots.stream()
+                    .filter(slot -> slot.getSlot().equals(currentTargetTime))
                     .noneMatch(slot -> slot.getCount() >= config.getMaxAmountOfWaitingQueueAppointmentsPerSlot());
 
             if ((afterAppointments || beforeAppointments) && slotFree) {

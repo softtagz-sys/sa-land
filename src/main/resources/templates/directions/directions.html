@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>KdG - Directions</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</head>
+
+<body>
+
+<div th:replace="~{common/common :: nav}"></div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2 class="text-center mb-4">Directions Lookup</h2>
+
+            <!-- Form to submit license plate -->
+            <form th:action="@{/get-directions}" method="get">
+                <div class="form-group mb-3">
+                    <label for="licensePlate">License Plate</label>
+                    <input type="text" id="licensePlate" name="licensePlate" class="form-control" placeholder="Enter License Plate" required>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+
+                    <!-- Refresh button -->
+                    <button type="button" class="btn btn-secondary" onclick="location.reload();">Refresh</button>
+                </div>
+            </form>
+
+            <!-- Display results below -->
+            <div class="mt-4">
+                <h4>Directions Data</h4>
+                <div th:if="${directionsdata != null}">
+                    <p><strong>Directions:</strong> <span th:text="${directionsdata.message}">N/A</span></p>
+                </div>
+                <div th:if="${directionsdata == null}">
+                    <p>No directions data available. Please enter a license plate to get directions.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{common/common :: footer}"></div>
+
+</body>
+</html>

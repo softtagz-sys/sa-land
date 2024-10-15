@@ -1,0 +1,62 @@
+### VALID POST Create Appointment
+POST localhost:8080/add-appointment HTTP/1.1
+Host: localhost
+Content-Type: application/x-www-form-urlencoded
+
+customerName=Desmet+NV&slot=2024-11-02T14%3A00&rawMaterial=Gips&licensePlate=1-TVI-848
+
+
+### ENTER TERRAIN
+POST localhost:8080/api/passages
+Content-Type: application/json
+Accept: application/json
+
+{
+  "licensePlate": "1-TVI-848",
+  "arrivalTime": "2024-11-02T14:12:00",
+  "incoming": true
+}
+
+### AT WEIGHBRIDGE
+POST http://localhost:15672/api/exchanges/%2F/warehouse-exchange/publish
+Authorization: Basic user password
+Content-Type: application/json
+
+{
+  "properties": {},
+  "routing_key": "weighbridge.test",
+  "payload": "{\"licensePlate\":\"1-TVI-848\",\"timestamp\":\"2024-11-02T14:15:30\",\"weight\":\"25\"}",
+  "payload_encoding": "string"
+}
+
+### AT CONVEYERBELT
+POST localhost:8080/api/conveyerbelts
+Content-Type: application/json
+Accept: application/json
+
+{
+  "licensePlate": "1-TVI-848"
+}
+
+### AT WEIGHBRIDGE
+POST http://localhost:15672/api/exchanges/%2F/warehouse-exchange/publish
+Authorization: Basic user password
+Content-Type: application/json
+
+{
+  "properties": {},
+  "routing_key": "weighbridge.test",
+  "payload": "{\"licensePlate\":\"1-TVI-848\",\"timestamp\":\"2024-11-02T14:25:30\",\"weight\":\"15\"}",
+  "payload_encoding": "string"
+}
+
+### EXIT TERRAIN
+POST localhost:8080/api/passages
+Content-Type: application/json
+Accept: application/json
+
+{
+  "licensePlate": "1-TVI-848",
+  "arrivalTime": "2024-11-02T14:49:00",
+  "incoming": false
+}
