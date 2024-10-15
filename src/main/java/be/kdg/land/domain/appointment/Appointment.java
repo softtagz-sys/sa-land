@@ -2,6 +2,7 @@ package be.kdg.land.domain.appointment;
 
 import be.kdg.land.domain.RawMaterial;
 import be.kdg.land.domain.customer.Customer;
+import be.kdg.land.domain.passage.Entry;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,6 +25,8 @@ public class Appointment {
     @NotNull
     private Customer customer;
 
+    @OneToOne(mappedBy = "appointment")
+    private Entry entry;
 
     @NotNull
     private LocalDateTime slot;

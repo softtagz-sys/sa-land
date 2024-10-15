@@ -1,20 +1,17 @@
 package be.kdg.land.controller.api;
 
 
-import be.kdg.land.controller.dto.GateMessageDto;
-import be.kdg.land.controller.dto.PassageDto;
-import be.kdg.land.service.AppointmentService;
+import be.kdg.land.controller.dto.in.PassageDto;
+import be.kdg.land.domain.PayloadDelivery;
 import be.kdg.land.service.PassageService;
 import be.kdg.land.service.exceptions.NoValidAppointmentException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/passages")
@@ -25,24 +22,25 @@ public class PassagesController {
 
 
     @PostMapping()
-    public ResponseEntity<GateMessageDto> addPassage(@RequestBody @Valid PassageDto passage) {
+    public ResponseEntity<Void> addPassage(@RequestBody @Valid PassageDto passage) {
 
-        try {
-            String message = passageService.truckAtGate(passage.getLicensePlate(), passage.getArrivalTime());
+        if (passage.isIncoming()) {
+            try {
+                Optional<PayloadDelivery> payloadDelivery = passageService.enterFacility(passage.getLicensePlate(), passage.getArrivalTime());
+                if (payloadDelivery.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Appointment not found
+                }
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(new GateMessageDto(message));
-        } catch (NoValidAppointmentException e) {
-            URI redirectUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path(String.format("/add-to-waitingqueue/%s/%s", passage.getLicensePlate(), passage.getArrivalTime()))
-                    .build()
-                    .toUri();
+                return ResponseEntity.status(HttpStatus.CREATED).build();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(redirectUri);
+            } catch (NoValidAppointmentException e) {
+                return ResponseEntity.status(HttpStatus.SEE_OTHER).build();
+            }
 
-            GateMessageDto gateMessageDto = new GateMessageDto("You don't have a valid appointment for this timeslot. Please fill out your details so you can be placed in the waiting queue.");
+        } else {
+            passageService.exitFacility(passage.getLicensePlate(), passage.getArrivalTime());
 
-            return ResponseEntity.status(HttpStatus.SEE_OTHER).headers(headers).body(gateMessageDto) ;
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         }
     }
 }

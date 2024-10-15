@@ -2,34 +2,21 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KdG</title>
+    <title>KdG - Waiting Queue</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </head>
 
 <body class="bg-light">
 
-<!-- Navigation Bar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="#">Krystal Distribution Group</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/add-appointment">Add An Appointment</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<div th:replace="~{common/common :: nav}"></div>
+
 
 <!-- Hero Section -->
-<div class="container-fluid p-5 text-center position-relative" style="background: url('https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center; background-size: cover;">
-    <div class="hero-overlay" style="background-color: rgba(0, 0, 0, 0.5); position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
+<div class="container-fluid p-5 text-center position-relative"
+     style="background: url('https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center; background-size: cover;">
+    <div class="hero-overlay"
+         style="background-color: rgba(0, 0, 0, 0.5); position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
     <div class="hero-content" style="position: relative; z-index: 1;">
         <h1 class="display-4 text-light">Welcome to Krystal Distribution Group</h1>
         <p class="lead text-light">Facilitating the delivery of raw materials from land to sea.</p>
@@ -42,7 +29,9 @@
 <div class="container mt-5">
     <h2 class="text-center">About Us</h2>
     <p class="text-center">
-        At Krystal Distribution Group, we specialize in warehousing and logistics, ensuring that raw materials are efficiently transported and delivered. Our dedicated team is committed to providing top-notch service and reliability, connecting suppliers with industries across the globe.
+        At Krystal Distribution Group, we specialize in warehousing and logistics, ensuring that raw materials are
+        efficiently transported and delivered. Our dedicated team is committed to providing top-notch service and
+        reliability, connecting suppliers with industries across the globe.
     </p>
 </div>
 
@@ -77,9 +66,7 @@
     </div>
 </div>
 
-<footer class="bg-dark text-white text-center py-4">
-    <p>&copy; 2024 Krystal Distribution Group. All rights reserved.</p>
-</footer>
+<div th:replace="~{common/common :: footer}"></div>
 
 </body>
 </html>

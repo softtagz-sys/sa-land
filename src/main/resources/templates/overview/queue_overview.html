@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>KdG - Queue</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}">
+    <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</head>
+
+<body>
+
+<div th:replace="~{common/common :: nav}"></div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2 class="text-center mb-4">Queue</h2>
+
+            <!-- Form to submit license plate and local datetime -->
+            <form th:action="@{/get-queue}" method="get">
+
+                <div class="form-group mb-3">
+                    <label for="time">Simulated Time</label>
+                    <input type="datetime-local" id="time" name="time" class="form-control" th:value="${time}"placeholder="Select Date and Time" required>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+
+            <!-- Display results below -->
+            <div class="mt-4">
+                <h4>Arrivals Data</h4>
+                <div th:if="${queue != null}">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Slot Time</th>
+                            <th>License Plate</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="queue_item : ${queue}">
+                            <td th:text="${#temporals.format(queue_item.slot, 'dd/MM HH:mm')}"></td>
+                            <td th:text="${queue_item.licensePlate}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:if="${queue == null}">
+                    <p>Queue is Free</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div th:replace="~{common/common :: footer}"></div>
+
+</body>
+</html>

@@ -29,9 +29,10 @@ public class Weighing {
     private String weighBridge;
 
     @NotBlank
+    @NotNull
     private String LicensePlate;
 
-    @ManyToOne
+    @Transient
     private PayloadDelivery payloadDelivery;
 
     public Weighing() {
@@ -40,5 +41,14 @@ public class Weighing {
     public Weighing(String weighBridge, String licensePlate) {
         this.weighBridge = weighBridge;
         LicensePlate = licensePlate;
+    }
+
+    public Weighing(UUID weighingId, LocalDateTime timestamp, double weight, String weighBridge, String licensePlate, PayloadDelivery payloadDelivery) {
+        this.weighingId = weighingId;
+        this.timestamp = timestamp;
+        this.weight = weight;
+        this.weighBridge = weighBridge;
+        LicensePlate = licensePlate;
+        this.payloadDelivery = payloadDelivery;
     }
 }

@@ -10,6 +10,4 @@ import java.util.UUID;
 @Repository
 public interface PassageRepository extends JpaRepository<Passage, UUID> {
 
-    List<Passage> findAllByLicensePlate(String LicensePlate);
-
 }

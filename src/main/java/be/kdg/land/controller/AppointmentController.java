@@ -1,7 +1,8 @@
 package be.kdg.land.controller;
 
-import be.kdg.land.controller.dto.AppointmentDto;
+
 import be.kdg.land.controller.dto.WaitingQueueAppointmentDto;
+import be.kdg.land.controller.dto.in_out.AppointmentDto;
 import be.kdg.land.domain.RawMaterial;
 import be.kdg.land.domain.appointment.Appointment;
 import be.kdg.land.domain.customer.Customer;
@@ -80,16 +81,10 @@ public class AppointmentController {
         return modelAndView;
     }
 
-    @GetMapping("/add-to-waitingqueue/{licensePlate}/{simulatedTimeOfRegistration}")
-    public String addToWaitingQueue(ModelMap model, @PathVariable String licensePlate, @PathVariable LocalDateTime simulatedTimeOfRegistration) {
+    @GetMapping("/add-to-waitingqueue")
+    public String addToWaitingQueue(ModelMap model) {
 
-        WaitingQueueAppointmentDto appointmentDto = new WaitingQueueAppointmentDto();
-        appointmentDto.setLicensePlate(licensePlate);
-        appointmentDto.setSimulatedTimeOfRegistration(simulatedTimeOfRegistration);
-
-        // Add the DTO to the model
-        model.addAttribute("new_waitingqueueappointment", appointmentDto);
-//        model.addAttribute("new_waitingqueueappointment", new WaitingQueueAppointmentDto(simulatedTimeOfRegistration, licensePlate));
+        model.addAttribute("new_waitingqueueappointment", new WaitingQueueAppointmentDto());
         return "appointments/waitingQueueAppointmentForm";
     }
 
