@@ -34,7 +34,7 @@
             <!-- Display results below -->
             <div class="mt-4">
                 <h4>Arrivals Data</h4>
-                <div th:if="${arrivals != null}">
+                <div th:if="${#lists.size(arrivals) != 0 && arrivals != null}">
                     <table class="table table-bordered">
                         <thead>
                         <tr>
@@ -59,7 +59,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div th:if="${arrivals == null}">
+                <div th:if="${arrivals == null || #lists.size(arrivals) == 0}">
                     <p>No arrival data available. Please enter a license plate and date to check arrivals.</p>
                 </div>
             </div>

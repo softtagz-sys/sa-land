@@ -2,7 +2,10 @@ package be.kdg.land.controller;
 
 import be.kdg.land.controller.dto.out.ArrivalOverviewDto;
 import be.kdg.land.controller.dto.out.QueueItemDto;
+import be.kdg.land.controller.dto.out.TruckPresentDto;
+import be.kdg.land.domain.PayloadDelivery;
 import be.kdg.land.domain.appointment.Appointment;
+import be.kdg.land.service.PayloadDeliveryService;
 import be.kdg.land.service.TerrainOverviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,7 @@ public class OverviewController {
 
     @Autowired
     private TerrainOverviewService terrainOverviewService;
+
 
     @GetMapping("/get-queue")
     public String getQueue(@RequestParam(value = "time", required = false) LocalDateTime time, ModelMap model) {
@@ -46,5 +50,14 @@ public class OverviewController {
             model.addAttribute("arrivals", arrivalDtos);
         }
         return "overview/arrival_overview";
+    }
+
+    @GetMapping("/get-terrain-status")
+    public String getTerrainStatus(ModelMap model) {
+        List<PayloadDelivery> deliveriesInProgress = terrainOverviewService.getPayloadDeliveriesInProgress();
+        List<TruckPresentDto> trucksPresent = deliveriesInProgress.stream().map(p -> new TruckPresentDto(p.getLicensePlate(), p.getCustomer().getName())).toList();
+        model.addAttribute("trucksPresent", trucksPresent);
+
+        return "overview/terrain_status";
     }
 }

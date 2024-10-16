@@ -1,9 +1,10 @@
 package be.kdg.land.service;
 
+import be.kdg.land.domain.PayloadDelivery;
 import be.kdg.land.domain.appointment.Appointment;
 import be.kdg.land.domain.appointment.AppointmentType;
 import be.kdg.land.repository.AppointmentRepository;
-import be.kdg.land.repository.PassageRepository;
+import be.kdg.land.repository.PayloadDeliveryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class TerrainOverviewService {
 
     @Autowired AppointmentRepository appointmentRepository;
+    @Autowired PayloadDeliveryRepository payloadDeliveryRepository;
 
     public List<Appointment> getArrivals(LocalDateTime slot) {
         LocalDateTime slotStart = slot.truncatedTo(ChronoUnit.HOURS);
@@ -25,5 +27,9 @@ public class TerrainOverviewService {
     public List<Appointment> getQueue(LocalDateTime simulatedTime) {
         return appointmentRepository.findAppointmentsAfterSlotWithType(simulatedTime, AppointmentType.WAITING_QUEUE)
                 .stream().filter(a -> a.getEntry() == null).toList();
+    }
+
+    public List<PayloadDelivery> getPayloadDeliveriesInProgress() {
+        return payloadDeliveryRepository.getPayloadDeliveriesWithCustomerByEntryIsNotNullAndExitIsNull();
     }
 }
