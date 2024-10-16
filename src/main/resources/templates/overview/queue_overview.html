@@ -34,7 +34,7 @@
             <!-- Display results below -->
             <div class="mt-4">
                 <h4>Arrivals Data</h4>
-                <div th:if="${queue != null}">
+                <div th:if="${queue != null && #lists.size(queue) != 0}">
                     <table class="table table-bordered">
                         <thead>
                         <tr>
@@ -50,7 +50,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div th:if="${queue == null}">
+                <div th:if="${queue == null || #lists.size(queue) == 0}">
                     <p>Queue is Free</p>
                 </div>
             </div>

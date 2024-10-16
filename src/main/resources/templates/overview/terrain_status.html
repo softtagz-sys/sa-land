@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>KdG - Status</title>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</head>
+
+<body>
+
+<div th:replace="~{common/common :: nav}"></div>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <h2 class="text-center mb-4">Status</h2>
+
+
+      <!-- Display results below -->
+      <div class="mt-4">
+        <h4>Trucks Present On Terrain</h4>
+        <div th:if="${#lists.size(trucksPresent) != 0 && trucksPresent != null}">
+          <h3 th:text="'Trucks on Terrain: ' + ${#lists.size(trucksPresent)}"></h3>
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>License Plate</th>
+              <th>Customer</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="truck : ${trucksPresent}">
+              <td th:text="${truck.licensePlate}"></td>
+              <td th:text="${truck.customer}"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div th:if="${#lists.size(trucksPresent) == 0}">
+          <p>No trucks on terrain.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div th:replace="~{common/common :: footer}"></div>
+
+</body>
+</html>
