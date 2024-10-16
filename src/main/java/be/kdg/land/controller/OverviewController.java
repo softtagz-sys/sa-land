@@ -52,7 +52,7 @@ public class OverviewController {
         return "overview/arrival_overview";
     }
 
-    @GetMapping("/get-terrain-status")
+    @GetMapping("/get-status")
     public String getTerrainStatus(ModelMap model) {
         List<PayloadDelivery> deliveriesInProgress = terrainOverviewService.getPayloadDeliveriesInProgress();
         List<TruckPresentDto> trucksPresent = deliveriesInProgress.stream().map(p -> new TruckPresentDto(p.getLicensePlate(), p.getCustomer().getName())).toList();
