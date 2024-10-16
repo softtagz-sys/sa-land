@@ -34,7 +34,7 @@
             <!-- Display results below -->
             <div class="mt-4">
                 <h4>Arrivals Data</h4>
-                <div th:if="${#lists.size(arrivals) != 0 && arrivals != null}">
+                <div th:if="${arrivals != null && #lists.size(arrivals) != 0 }">
                     <table class="table table-bordered">
                         <thead>
                         <tr>
