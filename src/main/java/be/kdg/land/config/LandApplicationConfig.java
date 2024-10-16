@@ -1,4 +1,4 @@
-package be.kdg.land;
+package be.kdg.land.config;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,17 +1,17 @@
 package be.kdg.land.service;
 
-import be.kdg.land.LandApplicationConfig;
+import be.kdg.land.config.LandApplicationConfig;
 import be.kdg.land.domain.PayloadDelivery;
 import be.kdg.land.domain.weighment.Weighing;
+import be.kdg.land.messaging.DeliverySender;
+import be.kdg.land.repository.AppointmentRepository;
 import be.kdg.land.repository.PayloadDeliveryRepository;
 import be.kdg.land.repository.WeighingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class WeighingService {
@@ -20,9 +20,14 @@ public class WeighingService {
     private LandApplicationConfig config;
 
     @Autowired
+    private DeliverySender deliverySender;
+
+    @Autowired
     private WeighingRepository weighingRepository;
     @Autowired
     private PayloadDeliveryRepository payloadDeliveryRepository;
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
 
     public Optional<Weighing> getNewWeighbridgeAssignment(String licensePlate) {
@@ -42,13 +47,20 @@ public class WeighingService {
         PayloadDelivery payloadDelivery = payloadDeliveryOptional.get();
 
 
-        // Weighing is added before truck arrives at weighbridge.
         boolean exitWeighing = payloadDelivery.getExitWeighing() != null;
+        Weighing weighing;
+        if (exitWeighing) {
+            weighing = payloadDelivery.getExitWeighing();
+            weighing.setTimestamp(timestamp);
+            weighing.setWeight(weight);
 
-        Weighing weighing = exitWeighing ? payloadDelivery.getExitWeighing() : payloadDelivery.getEntryWeighing();
+            deliverySender.sendDelivery(payloadDelivery);
 
-        weighing.setTimestamp(timestamp);
-        weighing.setWeight(weight);
+        } else {
+            weighing = payloadDelivery.getEntryWeighing();
+            weighing.setTimestamp(timestamp);
+            weighing.setWeight(weight);
+        }
 
         return Optional.of(weighingRepository.save(weighing));
     }

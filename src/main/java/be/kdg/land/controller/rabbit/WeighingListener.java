@@ -1,17 +1,12 @@
 package be.kdg.land.controller.rabbit;
 
-import be.kdg.land.LandApplicationConfig;
-import be.kdg.land.RabbitConfig;
+import be.kdg.land.config.RabbitConfig;
 import be.kdg.land.controller.dto.in.WeighingOperationDto;
-import be.kdg.land.controller.rabbit.config.RabbitMQTopology;
-import be.kdg.land.domain.weighment.Weighing;
 import be.kdg.land.service.PayloadDeliveryService;
 import be.kdg.land.service.WeighingService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 public class WeighingListener {

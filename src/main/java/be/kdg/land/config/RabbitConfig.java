@@ -1,4 +1,4 @@
-package be.kdg.land;
+package be.kdg.land.config;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,8 +11,9 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "rabbit")
 public class RabbitConfig {
 
-    private String WarehouseExchange;
-    private String LandExchange;
+    private String MineralFlowExchange;
+    private String DeliveryQueue;
+    private String WarehouseDeliveryKey;
     private String QueueWeighbridge;
     private String KeyWeighbridge;
 }
