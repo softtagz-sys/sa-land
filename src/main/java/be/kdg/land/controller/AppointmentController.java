@@ -119,6 +119,7 @@ public class AppointmentController {
                 modelAndView.getModelMap().addAttribute("appointmentType", "Waiting Queue");
 
             } else {
+                modelAndView.getModelMap().addAttribute("appointmentLogicError", "Warehouse is not available for delivery");
                 modelAndView.setViewName("appointments/waitingQueueAppointmentForm");
             }
 

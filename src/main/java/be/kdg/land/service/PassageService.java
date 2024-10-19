@@ -63,7 +63,7 @@ public class PassageService {
         payloadDelivery.setExit(newExit);
 
         passageRepository.save(newExit);
-        payloadDeliveryRepository.save(payloadDelivery); //Todo check if this is necessary?
+        payloadDeliveryRepository.save(payloadDelivery);
 
 
         LOGGER.info("The gate opened and {} was allowed OUT.", licensePlate);

@@ -61,6 +61,11 @@ public class AppointmentService {
         // Find First Free Slot
         LocalDateTime slot = findFirstFreeOutOfHoursSlot(simulatedTimeOfRegistration);
 
+        boolean warehouseAvailable = checkIfWarehouseIsAvailable(customer, rawMaterial);
+        if (!warehouseAvailable) {
+            return Optional.empty();
+        }
+
         Appointment appointment = new Appointment(customer, slot, rawMaterial, licensePlate, AppointmentType.WAITING_QUEUE);
 
         return Optional.of(this.appointmentRepository.save(appointment));
