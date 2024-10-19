@@ -1,4 +1,4 @@
-package be.kdg.land.controller.rabbit.config;
+package be.kdg.land.config.rabbit;
 
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

@@ -1,6 +1,6 @@
 package be.kdg.land.service;
 
-import be.kdg.land.LandApplicationConfig;
+import be.kdg.land.config.LandApplicationConfig;
 import be.kdg.land.domain.RawMaterial;
 import be.kdg.land.domain.appointment.Appointment;
 import be.kdg.land.domain.appointment.AppointmentType;
@@ -8,7 +8,6 @@ import be.kdg.land.domain.customer.Customer;
 import be.kdg.land.repository.AppointmentRepository;
 import be.kdg.land.repository.dto.AppointmentCountPerHour;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
