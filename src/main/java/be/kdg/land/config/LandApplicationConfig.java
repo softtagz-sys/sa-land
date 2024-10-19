@@ -21,6 +21,7 @@ public class LandApplicationConfig {
     private double weighbridgeUpperLimit;
     private String weighbridgeName;
 
+    private String warehouseIpAddress;
 
 
 }

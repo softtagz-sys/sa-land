@@ -70,7 +70,8 @@ public class AppointmentController {
                 modelAndView.getModelMap().addAttribute("appointmentType", "Appointment");
 
             } else {
-                modelAndView.setViewName("appointments/waitingQueueAppointmentForm");
+                modelAndView.getModelMap().addAttribute("appointmentLogicError", "Warehouse is not available for delivery");
+                modelAndView.setViewName("appointments/appointmentForm");
             }
 
         } catch (ConstraintViolationException | IllegalStateException e) {
