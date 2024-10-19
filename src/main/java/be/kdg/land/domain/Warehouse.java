@@ -2,7 +2,6 @@ package be.kdg.land.domain;
 
 import be.kdg.land.domain.customer.Customer;
 import jakarta.persistence.*;
-import jakarta.validation.Constraint;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 

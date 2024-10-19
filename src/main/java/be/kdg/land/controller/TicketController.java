@@ -1,16 +1,14 @@
 package be.kdg.land.controller;
 
-import be.kdg.land.controller.dto.out.DirectionsDto;
 import be.kdg.land.controller.dto.out.PayloadDeliveryDto;
 import be.kdg.land.controller.dto.tickets.PayloadDeliveryTicket;
 import be.kdg.land.controller.dto.tickets.WeighBridgeTicket;
 import be.kdg.land.domain.PayloadDelivery;
-import be.kdg.land.service.PayloadDeliveryService;
 import be.kdg.land.service.TicketService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,8 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.File;
@@ -31,18 +27,22 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.logging.Logger;
+
 
 @Controller
 public class TicketController {
 
-    private static final Logger LOGGER = Logger.getLogger(TicketController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(TicketController.class);
 
-    @Autowired TicketService ticketService;
-    @Autowired SpringTemplateEngine templateEngine;
+    private final TicketService ticketService;
+    private final SpringTemplateEngine templateEngine;
 
+    public TicketController(TicketService ticketService, SpringTemplateEngine templateEngine) {
+        this.ticketService = ticketService;
+        this.templateEngine = templateEngine;
+    }
 
-    @GetMapping("/get-tickets")
+    @GetMapping("/available-tickets")
     public ModelAndView getLicensePlateData(@RequestParam(value = "licensePlate", required = false) String licensePlate) {
         ModelAndView modelAndView = new ModelAndView("tickets/ticket_overview");
 
@@ -96,7 +96,7 @@ public class TicketController {
             renderer.createPDF(outputStream);
             return Optional.of(filePath);
         } catch (Exception e) {
-            LOGGER.severe(e.getMessage());
+            LOGGER.error(e.getMessage());
             return Optional.empty();
         }
     }

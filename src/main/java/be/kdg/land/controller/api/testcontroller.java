@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/warehouses")
 public class testcontroller {
 
+
+    // TODO Delete this class and adjust application.properties settings
+
     @GetMapping("/{warehouseId}")
     public ResponseEntity<WarehouseStatusDto> getWarehouseStatus(@PathVariable String warehouseId) {
 

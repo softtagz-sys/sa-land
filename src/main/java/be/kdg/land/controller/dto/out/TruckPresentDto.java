@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class TruckPresentDto {
-    private String licensePlate;
-    private String customer;
+    private final String licensePlate;
+    private final String customer;
 
     public TruckPresentDto(String licensePlate, String customer) {
         this.licensePlate = licensePlate;

@@ -1,6 +1,10 @@
 <!-- common.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</head>
+
 <body>
 
 <!-- Navigation Bar -->
@@ -13,25 +17,25 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/add-appointment">Add An Appointment</a>
+                    <a class="nav-link" href="/appointment-form">Add An Appointment</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/add-to-waitingqueue">Add to Waiting Queue</a>
+                    <a class="nav-link" href="/waitingqueue-form">Add to Waiting Queue</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/get-directions">Find your way</a>
+                    <a class="nav-link" href="/directions">Find your way</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/get-tickets">Tickets</a>
+                    <a class="nav-link" href="/available-tickets">Tickets</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/get-arrivals">Arrivals</a>
+                    <a class="nav-link" href="/arrivals-status">Arrivals Status</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/get-queue">Queue Status</a>
+                    <a class="nav-link" href="/queue-status">Queue Status</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/get-status">Terrain Status</a>
+                    <a class="nav-link" href="/terrain-status">Terrain Status</a>
                 </li>
             </ul>
         </div>

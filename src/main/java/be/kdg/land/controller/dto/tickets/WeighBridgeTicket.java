@@ -8,12 +8,12 @@ import java.util.UUID;
 @Getter
 public class WeighBridgeTicket {
 
-    private UUID payloadDeliveryId;
-    private Double grossWeightAtArrival;
-    private Double tareWeight;
-    private Double netWeight;
-    private LocalDateTime timestamp;
-    private String licensePlate;
+    private final UUID payloadDeliveryId;
+    private final Double grossWeightAtArrival;
+    private final Double tareWeight;
+    private final Double netWeight;
+    private final LocalDateTime timestamp;
+    private final String licensePlate;
 
     public WeighBridgeTicket(UUID payloadDeliveryId, Double grossWeightAtArrival, Double tareWeight, Double netWeight, LocalDateTime timestamp, String licensePlate) {
         this.payloadDeliveryId = payloadDeliveryId;

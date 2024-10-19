@@ -1,7 +1,6 @@
 package be.kdg.land.service;
 
 import be.kdg.land.config.LandApplicationConfig;
-import be.kdg.land.controller.TicketController;
 import be.kdg.land.domain.RawMaterial;
 import be.kdg.land.domain.Warehouse;
 import be.kdg.land.domain.appointment.Appointment;
@@ -13,28 +12,32 @@ import be.kdg.land.repository.AppointmentRepository;
 import be.kdg.land.repository.WarehouseRepository;
 import be.kdg.land.repository.dto.AppointmentCountPerHour;
 import feign.FeignException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
+
 
 @Service
 public class AppointmentService {
 
-    @Autowired private WarehouseSender warehouseSender;
+    private final WarehouseSender warehouseSender;
+    private final AppointmentRepository appointmentRepository;
+    private final WarehouseRepository warehouseRepository;
+    private final LandApplicationConfig config;
 
-    @Autowired private AppointmentRepository appointmentRepository;
-    @Autowired private WarehouseRepository warehouseRepository;
-    @Autowired private LandApplicationConfig config;
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppointmentService.class);
 
-    private static final Logger LOGGER = Logger.getLogger(AppointmentService.class.getName());
-
+    public AppointmentService(WarehouseSender warehouseSender, AppointmentRepository appointmentRepository, WarehouseRepository warehouseRepository, LandApplicationConfig config) {
+        this.warehouseSender = warehouseSender;
+        this.appointmentRepository = appointmentRepository;
+        this.warehouseRepository = warehouseRepository;
+        this.config = config;
+    }
 
     public Optional<Appointment> addAppointment(Customer customer, LocalDateTime slot, RawMaterial rawMaterial, String licensePlate) {
 
@@ -62,6 +65,13 @@ public class AppointmentService {
 
         return Optional.of(this.appointmentRepository.save(appointment));
 
+    }
+
+    public Optional<Appointment> findValidAppointment(String licensePlate, LocalDateTime arrivalTime) {
+
+        List<Appointment> appointments = appointmentRepository.findByLicensePlate(licensePlate);
+
+        return appointments.stream().filter(a -> isInSlot(a.getSlot(), arrivalTime)).findAny();
     }
 
     private LocalDateTime findFirstFreeOutOfHoursSlot(LocalDateTime simulatedTimeOfRegistration) {
@@ -116,17 +126,10 @@ public class AppointmentService {
             WarehouseStatusDto warehouseStatusDto = warehouseSender.getWarehouseStatus(warehouseOptional.get().getWarehouseId().toString());
             return warehouseStatusDto.isAvailable();
         } catch (FeignException.NotFound e) {
-            LOGGER.log(Level.WARNING, String.format("Failed to GET: %s",e.getMessage()));
+            LOGGER.error("Failed to GET: {}", e.getMessage());
             return false;
         }
 
-    }
-
-    public Optional<Appointment> findValidAppointment(String licensePlate, LocalDateTime arrivalTime) {
-
-        List<Appointment> appointments = appointmentRepository.findByLicensePlate(licensePlate);
-
-        return appointments.stream().filter(a -> isInSlot(a.getSlot(), arrivalTime)).findAny();
     }
 
     private boolean isInSlot(LocalDateTime slot, LocalDateTime arrivalTime) {
