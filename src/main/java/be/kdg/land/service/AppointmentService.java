@@ -1,12 +1,18 @@
 package be.kdg.land.service;
 
 import be.kdg.land.config.LandApplicationConfig;
+import be.kdg.land.controller.TicketController;
 import be.kdg.land.domain.RawMaterial;
+import be.kdg.land.domain.Warehouse;
 import be.kdg.land.domain.appointment.Appointment;
 import be.kdg.land.domain.appointment.AppointmentType;
 import be.kdg.land.domain.customer.Customer;
+import be.kdg.land.messaging.WarehouseSender;
+import be.kdg.land.messaging.dto.WarehouseStatusDto;
 import be.kdg.land.repository.AppointmentRepository;
+import be.kdg.land.repository.WarehouseRepository;
 import be.kdg.land.repository.dto.AppointmentCountPerHour;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +20,20 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 @Service
 public class AppointmentService {
 
+    @Autowired private WarehouseSender warehouseSender;
+
     @Autowired private AppointmentRepository appointmentRepository;
+    @Autowired private WarehouseRepository warehouseRepository;
     @Autowired private LandApplicationConfig config;
+
+    private static final Logger LOGGER = Logger.getLogger(AppointmentService.class.getName());
 
 
     public Optional<Appointment> addAppointment(Customer customer, LocalDateTime slot, RawMaterial rawMaterial, String licensePlate) {
@@ -27,6 +41,11 @@ public class AppointmentService {
         // Validations
         validateMaxAmountOfAppointmentsPerSlot(slot);
         validateValidSlotBusinessHours(slot);
+
+        boolean warehouseAvailable = checkIfWarehouseIsAvailable(customer, rawMaterial);
+        if (!warehouseAvailable) {
+            return Optional.empty();
+        }
 
         Appointment appointment = new Appointment(customer, slot, rawMaterial, licensePlate, AppointmentType.APPOINTMENT);
 
@@ -85,6 +104,22 @@ public class AppointmentService {
         if (!(withinTimeRange && isOnFullHour)) {
             throw new IllegalStateException("Slot time must be within time range of business hours, and be on the hour");
         }
+    }
+
+    private boolean checkIfWarehouseIsAvailable(Customer customer, RawMaterial rawMaterial) {
+        Optional<Warehouse> warehouseOptional = warehouseRepository.findByCustomer_CustomerIdAndRawMaterial_RawMaterialId(customer.getCustomerId(), rawMaterial.getRawMaterialId());
+        if (warehouseOptional.isEmpty()) {
+            return false;
+        }
+
+        try {
+            WarehouseStatusDto warehouseStatusDto = warehouseSender.getWarehouseStatus(warehouseOptional.get().getWarehouseId().toString());
+            return warehouseStatusDto.isAvailable();
+        } catch (FeignException.NotFound e) {
+            LOGGER.log(Level.WARNING, String.format("Failed to GET: %s",e.getMessage()));
+            return false;
+        }
+
     }
 
     public Optional<Appointment> findValidAppointment(String licensePlate, LocalDateTime arrivalTime) {
