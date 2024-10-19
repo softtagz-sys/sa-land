@@ -4,10 +4,8 @@ import be.kdg.land.config.LandApplicationConfig;
 import be.kdg.land.domain.PayloadDelivery;
 import be.kdg.land.domain.weighment.Weighing;
 import be.kdg.land.messaging.DeliverySender;
-import be.kdg.land.repository.AppointmentRepository;
 import be.kdg.land.repository.PayloadDeliveryRepository;
 import be.kdg.land.repository.WeighingRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,19 +14,18 @@ import java.util.Optional;
 @Service
 public class WeighingService {
 
-    @Autowired
-    private LandApplicationConfig config;
+    private final LandApplicationConfig config;
+    private final DeliverySender deliverySender;
+    private final WeighingRepository weighingRepository;
+    private final PayloadDeliveryRepository payloadDeliveryRepository;
 
-    @Autowired
-    private DeliverySender deliverySender;
 
-    @Autowired
-    private WeighingRepository weighingRepository;
-    @Autowired
-    private PayloadDeliveryRepository payloadDeliveryRepository;
-    @Autowired
-    private AppointmentRepository appointmentRepository;
-
+    public WeighingService(LandApplicationConfig config, DeliverySender deliverySender, WeighingRepository weighingRepository, PayloadDeliveryRepository payloadDeliveryRepository) {
+        this.config = config;
+        this.deliverySender = deliverySender;
+        this.weighingRepository = weighingRepository;
+        this.payloadDeliveryRepository = payloadDeliveryRepository;
+    }
 
     public Optional<Weighing> getNewWeighbridgeAssignment(String licensePlate) {
 

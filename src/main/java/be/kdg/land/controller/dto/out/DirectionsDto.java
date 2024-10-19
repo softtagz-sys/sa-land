@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public class DirectionsDto {
 
-    private String message;
+    private final String message;
 
     public DirectionsDto(String message) {
         this.message = message;

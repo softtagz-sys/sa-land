@@ -8,23 +8,23 @@ import be.kdg.land.domain.passage.Entry;
 import be.kdg.land.domain.weighment.Weighing;
 import be.kdg.land.repository.PayloadDeliveryRepository;
 import be.kdg.land.repository.WarehouseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class PayloadDeliveryService {
 
-    @Autowired
-    private PayloadDeliveryRepository payloadDeliveryRepository;
-    @Autowired
-    private WarehouseRepository warehouseRepository;
 
-    @Autowired
-    private WeighingService weighingService;
+    private final PayloadDeliveryRepository payloadDeliveryRepository;
+    private final WarehouseRepository warehouseRepository;
+    private final WeighingService weighingService;
+
+    public PayloadDeliveryService(PayloadDeliveryRepository payloadDeliveryRepository, WarehouseRepository warehouseRepository, WeighingService weighingService) {
+        this.payloadDeliveryRepository = payloadDeliveryRepository;
+        this.warehouseRepository = warehouseRepository;
+        this.weighingService = weighingService;
+    }
 
     public PayloadDelivery addPayloadDeliveryOnEntry(Customer customer, RawMaterial rawMaterial, String licensePlate, Entry entry) {
         PayloadDelivery payloadDelivery = new PayloadDelivery(customer, rawMaterial, licensePlate, entry);
@@ -37,7 +37,6 @@ public class PayloadDeliveryService {
 
         payloadDelivery.setEntryWeighing(newWeighingOptional.get());
 
-        //TODO Check Validation
         payloadDeliveryRepository.save(payloadDelivery);
 
         return payloadDelivery;

@@ -1,6 +1,5 @@
 package be.kdg.land.repository;
 
-import be.kdg.land.domain.RawMaterial;
 import be.kdg.land.domain.Warehouse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

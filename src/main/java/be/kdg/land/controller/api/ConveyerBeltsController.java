@@ -4,7 +4,6 @@ import be.kdg.land.controller.dto.in.ArrivedAtDto;
 import be.kdg.land.domain.PayloadDelivery;
 import be.kdg.land.service.PayloadDeliveryService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,8 +17,12 @@ import java.util.Optional;
 @RequestMapping("/api/conveyerbelts")
 public class ConveyerBeltsController {
 
-    @Autowired
-    PayloadDeliveryService payloadDeliveryService;
+
+    private final PayloadDeliveryService payloadDeliveryService;
+
+    public ConveyerBeltsController(PayloadDeliveryService payloadDeliveryService) {
+        this.payloadDeliveryService = payloadDeliveryService;
+    }
 
     @PostMapping
     public ResponseEntity<Void> addConveyerBeltDelivery(@RequestBody @Valid ArrivedAtDto arrivedAtDto) {

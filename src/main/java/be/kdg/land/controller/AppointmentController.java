@@ -1,7 +1,7 @@
 package be.kdg.land.controller;
 
 
-import be.kdg.land.controller.dto.WaitingQueueAppointmentDto;
+import be.kdg.land.controller.dto.in_out.WaitingQueueAppointmentDto;
 import be.kdg.land.controller.dto.in_out.AppointmentDto;
 import be.kdg.land.domain.RawMaterial;
 import be.kdg.land.domain.appointment.Appointment;
@@ -11,38 +11,38 @@ import be.kdg.land.service.CustomerService;
 import be.kdg.land.service.RawMaterialService;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Controller
 public class AppointmentController {
-    @Autowired
-    private AppointmentService appointmentService;
-    @Autowired
-    private CustomerService customerService;
-    @Autowired
-    private RawMaterialService rawMaterialService;
 
+    private final AppointmentService appointmentService;
+    private final CustomerService customerService;
+    private final RawMaterialService rawMaterialService;
 
-    @GetMapping("/add-appointment")
-    public String addAppointment(ModelMap model) {
+    public AppointmentController(AppointmentService appointmentService, CustomerService customerService, RawMaterialService rawMaterialService) {
+        this.appointmentService = appointmentService;
+        this.customerService = customerService;
+        this.rawMaterialService = rawMaterialService;
+    }
+
+    @GetMapping("/appointment-form")
+    public String appointmentForm(ModelMap model) {
         model.addAttribute("new_appointment", new AppointmentDto());
         return "appointments/appointmentForm";
     }
 
-    @PostMapping("/add-appointment")
-    public ModelAndView addAppointment(@ModelAttribute("new_appointment") @Valid AppointmentDto newAppointment, BindingResult errors) {
-        final ModelAndView modelAndView = new ModelAndView();
+    @PostMapping("/appointment")
+    public ModelAndView newAppointment(@ModelAttribute("new_appointment") @Valid AppointmentDto newAppointment, BindingResult errors) {
+        ModelAndView modelAndView = new ModelAndView();
 
         Optional<Customer> customer = customerService.getCustomerByName(newAppointment.getCustomerName());
         Optional<RawMaterial> rawMaterial = rawMaterialService.findRawMaterialByName(newAppointment.getRawMaterial());
@@ -82,17 +82,16 @@ public class AppointmentController {
         return modelAndView;
     }
 
-    @GetMapping("/add-to-waitingqueue")
-    public String addToWaitingQueue(ModelMap model) {
+    @GetMapping("/waitingqueue-form")
+    public String waitingQueueForm(ModelMap model) {
 
         model.addAttribute("new_waitingqueueappointment", new WaitingQueueAppointmentDto());
         return "appointments/waitingQueueAppointmentForm";
     }
 
-    @PostMapping("/add-to-waitingqueue")
+    @PostMapping("/waitingqueue")
     public ModelAndView addToWaitingQueue(@ModelAttribute("new_waitingqueueappointment") @Valid WaitingQueueAppointmentDto waitingQueueAppointmentDto, BindingResult errors) {
-        final ModelAndView modelAndView = new ModelAndView();
-
+        ModelAndView modelAndView = new ModelAndView();
 
         Optional<Customer> customer = customerService.getCustomerByName(waitingQueueAppointmentDto.getCustomerName());
         Optional<RawMaterial> rawMaterial = rawMaterialService.findRawMaterialByName(waitingQueueAppointmentDto.getRawMaterial());

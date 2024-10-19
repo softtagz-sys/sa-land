@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
 @Getter
 public class DeliveryCompleteDto {
 
-    private String customerId;
-    private String rawMaterial;
-    private double weight;
-    private LocalDateTime timestamp;
+    private final String customerId;
+    private final String rawMaterial;
+    private final double weight;
+    private final LocalDateTime timestamp;
 
     public DeliveryCompleteDto(String customerId, String rawMaterial, double weight, LocalDateTime timestamp) {
         this.customerId = customerId;

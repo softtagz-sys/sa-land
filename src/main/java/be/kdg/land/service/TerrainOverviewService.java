@@ -5,7 +5,6 @@ import be.kdg.land.domain.appointment.Appointment;
 import be.kdg.land.domain.appointment.AppointmentType;
 import be.kdg.land.repository.AppointmentRepository;
 import be.kdg.land.repository.PayloadDeliveryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,8 +14,13 @@ import java.util.List;
 @Service
 public class TerrainOverviewService {
 
-    @Autowired AppointmentRepository appointmentRepository;
-    @Autowired PayloadDeliveryRepository payloadDeliveryRepository;
+    private final AppointmentRepository appointmentRepository;
+    private final PayloadDeliveryRepository payloadDeliveryRepository;
+
+    public TerrainOverviewService(AppointmentRepository appointmentRepository, PayloadDeliveryRepository payloadDeliveryRepository) {
+        this.appointmentRepository = appointmentRepository;
+        this.payloadDeliveryRepository = payloadDeliveryRepository;
+    }
 
     public List<Appointment> getArrivals(LocalDateTime slot) {
         LocalDateTime slotStart = slot.truncatedTo(ChronoUnit.HOURS);

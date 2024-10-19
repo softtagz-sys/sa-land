@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 @Getter
 public class ArrivalOverviewDto {
 
-    private LocalDateTime slot;
-    private String licensePlate;
-    private boolean arrived;
+    private final LocalDateTime slot;
+    private final String licensePlate;
+    private final boolean arrived;
 
     public ArrivalOverviewDto(LocalDateTime slot, String licensePlate, boolean arrived) {
         this.slot = slot;

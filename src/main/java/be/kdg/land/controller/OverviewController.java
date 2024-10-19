@@ -5,9 +5,7 @@ import be.kdg.land.controller.dto.out.QueueItemDto;
 import be.kdg.land.controller.dto.out.TruckPresentDto;
 import be.kdg.land.domain.PayloadDelivery;
 import be.kdg.land.domain.appointment.Appointment;
-import be.kdg.land.service.PayloadDeliveryService;
 import be.kdg.land.service.TerrainOverviewService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,12 +17,15 @@ import java.util.List;
 @Controller
 public class OverviewController {
 
-    @Autowired
-    private TerrainOverviewService terrainOverviewService;
 
+    private final TerrainOverviewService terrainOverviewService;
 
-    @GetMapping("/get-queue")
-    public String getQueue(@RequestParam(value = "time", required = false) LocalDateTime time, ModelMap model) {
+    public OverviewController(TerrainOverviewService terrainOverviewService) {
+        this.terrainOverviewService = terrainOverviewService;
+    }
+
+    @GetMapping("/queue-status")
+    public String getQueueStatus(@RequestParam(value = "time", required = false) LocalDateTime time, ModelMap model) {
         model.addAttribute("time", time);
         if (time != null) {
             List<Appointment> queue =  terrainOverviewService.getQueue(time);
@@ -37,8 +38,8 @@ public class OverviewController {
         return "overview/queue_overview";
     }
 
-    @GetMapping("/get-arrivals")
-    public String getArrivals(@RequestParam(value = "slot", required = false) LocalDateTime slot, ModelMap model) {
+    @GetMapping("/arrivals-status")
+    public String getArrivalsStatus(@RequestParam(value = "slot", required = false) LocalDateTime slot, ModelMap model) {
         model.addAttribute("slot", slot);
         if (slot != null) {
             List<Appointment> arrivals =  terrainOverviewService.getArrivals(slot);
@@ -52,7 +53,7 @@ public class OverviewController {
         return "overview/arrival_overview";
     }
 
-    @GetMapping("/get-status")
+    @GetMapping("/terrain-status")
     public String getTerrainStatus(ModelMap model) {
         List<PayloadDelivery> deliveriesInProgress = terrainOverviewService.getPayloadDeliveriesInProgress();
         List<TruckPresentDto> trucksPresent = deliveriesInProgress.stream().map(p -> new TruckPresentDto(p.getLicensePlate(), p.getCustomer().getName())).toList();

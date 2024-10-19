@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 @Getter
 public class QueueItemDto {
 
-    private LocalDateTime slot;
-    private String licensePlate;
+    private final LocalDateTime slot;
+    private final String licensePlate;
 
     public QueueItemDto(LocalDateTime slot, String licensePlate) {
         this.slot = slot;

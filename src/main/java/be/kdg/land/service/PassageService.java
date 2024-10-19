@@ -9,8 +9,8 @@ import be.kdg.land.repository.PayloadDeliveryRepository;
 import be.kdg.land.service.exceptions.NoValidAppointmentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -18,16 +18,21 @@ import java.util.Optional;
 @Service
 public class PassageService {
 
-    @Autowired private PayloadDeliveryService payloadDeliveryService;
-    @Autowired private AppointmentService appointmentService;
+    private final PayloadDeliveryService payloadDeliveryService;
+    private final AppointmentService appointmentService;
+    private final PassageRepository passageRepository;
+    private final PayloadDeliveryRepository payloadDeliveryRepository;
 
-    @Autowired private PassageRepository passageRepository;
-    @Autowired private PayloadDeliveryRepository payloadDeliveryRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(PassageService.class);
 
-    Logger logger = LoggerFactory.getLogger(PassageService.class);
+    public PassageService(PayloadDeliveryService payloadDeliveryService, AppointmentService appointmentService, PassageRepository passageRepository, PayloadDeliveryRepository payloadDeliveryRepository) {
+        this.payloadDeliveryService = payloadDeliveryService;
+        this.appointmentService = appointmentService;
+        this.passageRepository = passageRepository;
+        this.payloadDeliveryRepository = payloadDeliveryRepository;
+    }
 
-
-
+    @Transactional
     public Optional<PayloadDelivery> enterFacility(String licensePlate, LocalDateTime arrivalTime) {
 
         Optional<Appointment> appointment = appointmentService.findValidAppointment(licensePlate, arrivalTime);
@@ -39,11 +44,12 @@ public class PassageService {
 
         Optional<PayloadDelivery> newPd = Optional.of(payloadDeliveryService.addPayloadDeliveryOnEntry(appointment.get().getCustomer(), appointment.get().getRawMaterial(), licensePlate, entry));
 
-        logger.info(String.format("The gate opened and %s was allowed IN.", licensePlate));
+        LOGGER.info("The gate opened and {} was allowed IN.", licensePlate);
 
         return newPd;
     }
 
+    @Transactional
     public void exitFacility(String licensePlate, LocalDateTime exitTime) {
 
         Optional<PayloadDelivery> payloadDeliveryOpt = payloadDeliveryRepository.findByLicensePlateAndExitIsNullAndEntryIsNotNull(licensePlate);
@@ -60,6 +66,6 @@ public class PassageService {
         payloadDeliveryRepository.save(payloadDelivery); //Todo check if this is necessary?
 
 
-        logger.info(String.format("The gate opened and %s was allowed OUT.", licensePlate));
+        LOGGER.info("The gate opened and {} was allowed OUT.", licensePlate);
     }
 }

@@ -1,6 +1,5 @@
 package be.kdg.land.controller.dto.tickets;
 
-import be.kdg.land.domain.RawMaterial;
 import lombok.Getter;
 
 import java.time.LocalDate;

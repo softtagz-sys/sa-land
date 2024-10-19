@@ -1,18 +1,21 @@
 package be.kdg.land.messaging;
 
 import be.kdg.land.config.RabbitConfig;
-import be.kdg.land.config.rabbit.RabbitMQTopology;
 import be.kdg.land.domain.PayloadDelivery;
 import be.kdg.land.messaging.dto.DeliveryCompleteDto;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DeliverySender {
 
-    @Autowired RabbitTemplate rabbitTemplate;
-    @Autowired RabbitConfig rabbitConfig;
+    private final RabbitTemplate rabbitTemplate;
+    private final RabbitConfig rabbitConfig;
+
+    public DeliverySender(RabbitTemplate rabbitTemplate, RabbitConfig rabbitConfig) {
+        this.rabbitTemplate = rabbitTemplate;
+        this.rabbitConfig = rabbitConfig;
+    }
 
     public void sendDelivery(PayloadDelivery payloadDelivery) {
 

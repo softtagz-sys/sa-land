@@ -7,9 +7,9 @@ import java.util.UUID;
 
 @Getter
 public class WeighbridgeMessageDto {
-    private String message;
-    private UUID warehouseId;
-    private WeighBridgeTicket ticket;
+    private final String message;
+    private final UUID warehouseId;
+    private final WeighBridgeTicket ticket;
 
     public WeighbridgeMessageDto(String message, UUID warehouseId, WeighBridgeTicket ticket) {
         this.message = message;

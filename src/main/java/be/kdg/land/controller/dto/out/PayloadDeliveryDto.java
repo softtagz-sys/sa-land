@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 @Getter
 public class PayloadDeliveryDto {
 
-    private String payloadDeliveryId;
-    private String customerName;
-    private LocalDateTime deliveryTime;
-    private boolean wbtAvailable;
-    private boolean pdtAvailable;
+    private final String payloadDeliveryId;
+    private final String customerName;
+    private final LocalDateTime deliveryTime;
+    private final boolean wbtAvailable;
+    private final boolean pdtAvailable;
 
     public PayloadDeliveryDto(String payloadDeliveryId, String customerName, LocalDateTime deliveryTime, boolean wbtAvailable, boolean pdtAvailable) {
         this.payloadDeliveryId = payloadDeliveryId;
