@@ -122,19 +122,13 @@ public class AppointmentService {
     }
 
     private boolean checkIfWarehouseIsAvailable(Customer customer, RawMaterial rawMaterial) {
-        Optional<Warehouse> warehouseOptional = warehouseRepository.findByCustomer_CustomerIdAndRawMaterial_RawMaterialId(customer.getCustomerId(), rawMaterial.getRawMaterialId());
-        if (warehouseOptional.isEmpty()) {
-            return false;
-        }
-
         try {
-            WarehouseStatusDto warehouseStatusDto = warehouseSender.getWarehouseStatus(warehouseOptional.get().getWarehouseId().toString());
+            WarehouseStatusDto warehouseStatusDto = warehouseSender.getWarehouseStatus(customer.getCustomerId().toString(), rawMaterial.getName());
             return warehouseStatusDto.isAvailable();
         } catch (FeignException.NotFound e) {
             LOGGER.error("Failed to GET: {}", e.getMessage());
             return false;
         }
-
     }
 
     private boolean isInSlot(LocalDateTime slot, LocalDateTime arrivalTime) {

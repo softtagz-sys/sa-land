@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "warehouseClient", url = "${app.warehouseIpAddress}")
 public interface WarehouseSender {
 
-    @GetMapping("/api/warehouses/{warehouseId}")
-    WarehouseStatusDto getWarehouseStatus(@PathVariable("warehouseId") String warehouseId);
+
+    @GetMapping("/api/warehouses/{customerId}/{rawMaterial}")
+    WarehouseStatusDto getWarehouseStatus(@PathVariable String customerId, @PathVariable String rawMaterial);
 }

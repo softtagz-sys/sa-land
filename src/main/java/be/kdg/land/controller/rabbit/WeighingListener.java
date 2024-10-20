@@ -6,8 +6,9 @@ import be.kdg.land.service.PayloadDeliveryService;
 import be.kdg.land.service.WeighingService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
-@Component
+@Controller
 public class WeighingListener {
 
     private final RabbitConfig rabbitConfig; // Gebruikt in RabbitListener Annotation
@@ -15,7 +16,7 @@ public class WeighingListener {
     private final WeighingService weighingService;
     private final PayloadDeliveryService payloadDeliveryService;
 
-// TODO add validation input
+
 
 
     public WeighingListener(RabbitConfig rabbitConfig, WeighingService weighingService, PayloadDeliveryService payloadDeliveryService) {
@@ -24,6 +25,8 @@ public class WeighingListener {
         this.payloadDeliveryService = payloadDeliveryService;
     }
 
+
+    // TODO add validation input
     @RabbitListener(queues = "#{@rabbitConfig.getQueueWeighbridge()}")
     public void addWeighing(WeighingOperationDto weighingOperationDto) {
         weighingService.addWeighing(weighingOperationDto.getLicensePlate(), weighingOperationDto.getTimestamp(), weighingOperationDto.getWeight());
