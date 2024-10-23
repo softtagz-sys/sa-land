@@ -17,8 +17,6 @@ public class WeighingListener {
     private final PayloadDeliveryService payloadDeliveryService;
 
 
-
-
     public WeighingListener(RabbitConfig rabbitConfig, WeighingService weighingService, PayloadDeliveryService payloadDeliveryService) {
         this.rabbitConfig = rabbitConfig;
         this.weighingService = weighingService;

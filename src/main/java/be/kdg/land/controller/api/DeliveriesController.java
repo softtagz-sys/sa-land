@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/conveyerbelts")
-public class ConveyerBeltsController {
+@RequestMapping("/api/deliveries")
+public class DeliveriesController {
 
 
     private final PayloadDeliveryService payloadDeliveryService;
 
-    public ConveyerBeltsController(PayloadDeliveryService payloadDeliveryService) {
+    public DeliveriesController(PayloadDeliveryService payloadDeliveryService) {
         this.payloadDeliveryService = payloadDeliveryService;
     }
 

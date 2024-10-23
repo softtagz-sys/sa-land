@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 ### AT CONVEYERBELT
-POST localhost:8080/api/conveyerbelts
+POST localhost:8080/api/deliveries
 Content-Type: application/json
 Accept: application/json
 

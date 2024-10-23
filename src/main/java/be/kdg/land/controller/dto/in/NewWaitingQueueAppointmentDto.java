@@ -3,13 +3,12 @@ package be.kdg.land.controller.dto.in;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Setter
+
 @Getter
-public class WaitingQueueAppointmentDto {
+public class NewWaitingQueueAppointmentDto {
 
     @NotBlank(message = "You must provide a customer name")
     private String customerName;
@@ -25,10 +24,10 @@ public class WaitingQueueAppointmentDto {
     private String licensePlate;
 
 
-    public WaitingQueueAppointmentDto() {
+    public NewWaitingQueueAppointmentDto() {
     }
 
-    public WaitingQueueAppointmentDto(String customerName, String rawMaterial, LocalDateTime simulatedTimeOfRegistration, String licensePlate) {
+    public NewWaitingQueueAppointmentDto(String customerName, String rawMaterial, LocalDateTime simulatedTimeOfRegistration, String licensePlate) {
         this.customerName = customerName;
         this.rawMaterial = rawMaterial;
         this.simulatedTimeOfRegistration = simulatedTimeOfRegistration;

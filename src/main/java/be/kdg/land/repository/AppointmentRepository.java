@@ -2,7 +2,7 @@ package be.kdg.land.repository;
 
 import be.kdg.land.domain.appointment.Appointment;
 import be.kdg.land.domain.appointment.AppointmentType;
-import be.kdg.land.repository.dto.AppointmentCountPerHour;
+import be.kdg.land.repository.projection.AppointmentCountPerHour;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -31,34 +31,17 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
 
     List<Appointment> findByLicensePlate(String licensePlate);
 
-
     @Query(
         value = """
-        SELECT new be.kdg.land.repository.dto.AppointmentCountPerHour(a.slot, count(a.appointmentId))
+        SELECT new be.kdg.land.repository.projection.AppointmentCountPerHour(a.slot, count(a.appointmentId))
         FROM Appointment a
         WHERE a.slot >= :fromTime
         GROUP BY a.slot
         """)
     List<AppointmentCountPerHour> CountAppointmentsPerSlot(LocalDateTime fromTime);
 
-    @Query(
-            """
-            SELECT a
-            FROM Appointment a
-            WHERE a.slot >= :fromTime and a.slot < :toTime
-            AND a.appointmentType = :type
-            """
-    )
-    List<Appointment> findApppointmentsInSlotWithType(LocalDateTime fromTime, LocalDateTime toTime, AppointmentType type);
+    List<Appointment> findAppointmentsByAppointmentTypeAndSlotGreaterThanEqualAndSlotBefore(AppointmentType type, LocalDateTime fromTime, LocalDateTime toTime);
 
-    @Query(
-            """
-            SELECT a
-            FROM Appointment a
-            WHERE a.slot >= :fromTime
-            AND a.appointmentType = :type
-            """
-    )
-    List<Appointment> findAppointmentsAfterSlotWithType(LocalDateTime fromTime, AppointmentType type);
+    List<Appointment> findAppointmentsByAppointmentTypeAndSlotGreaterThanEqual(AppointmentType type, LocalDateTime fromTime);
 
 }

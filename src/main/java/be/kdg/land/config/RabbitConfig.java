@@ -11,9 +11,9 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "rabbit")
 public class RabbitConfig {
 
-    private String MineralFlowExchange;
-    private String DeliveryQueue;
-    private String WarehouseDeliveryKey;
-    private String QueueWeighbridge;
-    private String KeyWeighbridge;
+    private String mineralFlowExchange;
+    private String deliveryQueue;
+    private String warehouseDeliveryKey;
+    private String queueWeighbridge;
+    private String keyWeighbridge;
 }

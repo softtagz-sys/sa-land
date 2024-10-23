@@ -1,14 +1,16 @@
 package be.kdg.land.controller;
 
 
-import be.kdg.land.controller.dto.in_out.WaitingQueueAppointmentDto;
-import be.kdg.land.controller.dto.in_out.AppointmentDto;
+import be.kdg.land.controller.dto.in.NewAppointmentDto;
+import be.kdg.land.controller.dto.in.NewWaitingQueueAppointmentDto;
+import be.kdg.land.controller.dto.out.AppointmentDto;
 import be.kdg.land.domain.RawMaterial;
 import be.kdg.land.domain.appointment.Appointment;
 import be.kdg.land.domain.customer.Customer;
 import be.kdg.land.service.AppointmentService;
 import be.kdg.land.service.CustomerService;
 import be.kdg.land.service.RawMaterialService;
+import be.kdg.land.service.exceptions.MaxAmountAppointmentsSlotReached;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -36,12 +38,12 @@ public class AppointmentController {
 
     @GetMapping("/appointment-form")
     public String appointmentForm(ModelMap model) {
-        model.addAttribute("new_appointment", new AppointmentDto());
+        model.addAttribute("new_appointment", new NewAppointmentDto());
         return "appointments/appointmentForm";
     }
 
     @PostMapping("/appointment")
-    public ModelAndView newAppointment(@ModelAttribute("new_appointment") @Valid AppointmentDto newAppointment, BindingResult errors) {
+    public ModelAndView newAppointment(@ModelAttribute("new_appointment") @Valid NewAppointmentDto newAppointment, BindingResult errors) {
         ModelAndView modelAndView = new ModelAndView();
 
         Optional<Customer> customer = customerService.getCustomerByName(newAppointment.getCustomerName());
@@ -74,7 +76,7 @@ public class AppointmentController {
                 modelAndView.setViewName("appointments/appointmentForm");
             }
 
-        } catch (ConstraintViolationException | IllegalStateException e) {
+        } catch (ConstraintViolationException | MaxAmountAppointmentsSlotReached e) {
             modelAndView.getModelMap().addAttribute("appointmentLogicError", e.getMessage());
             modelAndView.setViewName("appointments/appointmentForm");
         }
@@ -85,12 +87,12 @@ public class AppointmentController {
     @GetMapping("/waitingqueue-form")
     public String waitingQueueForm(ModelMap model) {
 
-        model.addAttribute("new_waitingqueueappointment", new WaitingQueueAppointmentDto());
+        model.addAttribute("new_waitingqueueappointment", new NewWaitingQueueAppointmentDto());
         return "appointments/waitingQueueAppointmentForm";
     }
 
     @PostMapping("/waitingqueue")
-    public ModelAndView addToWaitingQueue(@ModelAttribute("new_waitingqueueappointment") @Valid WaitingQueueAppointmentDto waitingQueueAppointmentDto, BindingResult errors) {
+    public ModelAndView addToWaitingQueue(@ModelAttribute("new_waitingqueueappointment") @Valid NewWaitingQueueAppointmentDto waitingQueueAppointmentDto, BindingResult errors) {
         ModelAndView modelAndView = new ModelAndView();
 
         Optional<Customer> customer = customerService.getCustomerByName(waitingQueueAppointmentDto.getCustomerName());
@@ -123,7 +125,7 @@ public class AppointmentController {
                 modelAndView.setViewName("appointments/waitingQueueAppointmentForm");
             }
 
-        } catch (ConstraintViolationException | IllegalStateException e) {
+        } catch (ConstraintViolationException e) {
             modelAndView.getModelMap().addAttribute("appointmentLogicError", e.getMessage());
             modelAndView.setViewName("appointments/waitingQueueAppointmentForm");
         }

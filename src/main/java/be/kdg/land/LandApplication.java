@@ -11,4 +11,8 @@ public class LandApplication {
         SpringApplication.run(LandApplication.class, args);
     }
 
+    // UITBREIDINGEN
+    // TODO MapStruct voor DTOs toevoegen
+    // TODO Strategy for slots toevoegen
+
 }

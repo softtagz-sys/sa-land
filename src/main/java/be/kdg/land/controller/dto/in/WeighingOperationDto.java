@@ -1,5 +1,6 @@
 package be.kdg.land.controller.dto.in;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

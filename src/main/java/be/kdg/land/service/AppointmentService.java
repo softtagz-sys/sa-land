@@ -2,15 +2,14 @@ package be.kdg.land.service;
 
 import be.kdg.land.config.LandApplicationConfig;
 import be.kdg.land.domain.RawMaterial;
-import be.kdg.land.domain.Warehouse;
 import be.kdg.land.domain.appointment.Appointment;
 import be.kdg.land.domain.appointment.AppointmentType;
 import be.kdg.land.domain.customer.Customer;
 import be.kdg.land.messaging.WarehouseSender;
 import be.kdg.land.messaging.dto.WarehouseStatusDto;
 import be.kdg.land.repository.AppointmentRepository;
-import be.kdg.land.repository.WarehouseRepository;
-import be.kdg.land.repository.dto.AppointmentCountPerHour;
+import be.kdg.land.repository.projection.AppointmentCountPerHour;
+import be.kdg.land.service.exceptions.MaxAmountAppointmentsSlotReached;
 import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,15 +26,13 @@ public class AppointmentService {
 
     private final WarehouseSender warehouseSender;
     private final AppointmentRepository appointmentRepository;
-    private final WarehouseRepository warehouseRepository;
     private final LandApplicationConfig config;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppointmentService.class);
 
-    public AppointmentService(WarehouseSender warehouseSender, AppointmentRepository appointmentRepository, WarehouseRepository warehouseRepository, LandApplicationConfig config) {
+    public AppointmentService(WarehouseSender warehouseSender, AppointmentRepository appointmentRepository, LandApplicationConfig config) {
         this.warehouseSender = warehouseSender;
         this.appointmentRepository = appointmentRepository;
-        this.warehouseRepository = warehouseRepository;
         this.config = config;
     }
 
@@ -108,7 +105,7 @@ public class AppointmentService {
     private void validateMaxAmountOfAppointmentsPerSlot(LocalDateTime slot) {
         int size = appointmentRepository.findBySlot(slot).size();
         if (size >= config.getMaxAmountOfAppointmentsPerSlot()) {
-            throw new IllegalStateException("Max amount of appointment per slot has been reached");
+            throw new MaxAmountAppointmentsSlotReached("Max amount of appointment per slot has been reached");
         }
     }
 

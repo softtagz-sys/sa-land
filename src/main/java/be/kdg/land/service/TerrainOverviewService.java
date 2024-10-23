@@ -25,11 +25,12 @@ public class TerrainOverviewService {
     public List<Appointment> getArrivals(LocalDateTime slot) {
         LocalDateTime slotStart = slot.truncatedTo(ChronoUnit.HOURS);
         LocalDateTime slotEnd = slotStart.plusHours(1);
-        return appointmentRepository.findApppointmentsInSlotWithType(slotStart, slotEnd, AppointmentType.APPOINTMENT);
+        return appointmentRepository.findAppointmentsByAppointmentTypeAndSlotGreaterThanEqualAndSlotBefore(AppointmentType.APPOINTMENT, slotStart, slotEnd);
     }
 
     public List<Appointment> getQueue(LocalDateTime simulatedTime) {
-        return appointmentRepository.findAppointmentsAfterSlotWithType(simulatedTime, AppointmentType.WAITING_QUEUE)
+        LocalDateTime slotStart = simulatedTime.truncatedTo(ChronoUnit.HOURS);
+          return appointmentRepository.findAppointmentsByAppointmentTypeAndSlotGreaterThanEqual(AppointmentType.WAITING_QUEUE, slotStart)
                 .stream().filter(a -> a.getEntry() == null).toList();
     }
 

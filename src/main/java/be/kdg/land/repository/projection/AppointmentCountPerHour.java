@@ -1,4 +1,4 @@
-package be.kdg.land.repository.dto;
+package be.kdg.land.repository.projection;
 
 import lombok.Getter;
 
