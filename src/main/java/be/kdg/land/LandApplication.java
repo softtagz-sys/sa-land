@@ -12,7 +12,6 @@ public class LandApplication {
     }
 
     // UITBREIDINGEN
-    // TODO MapStruct voor DTOs toevoegen
     // TODO Strategy for slots toevoegen
 
 }

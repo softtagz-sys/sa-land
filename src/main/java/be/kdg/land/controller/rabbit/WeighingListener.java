@@ -22,9 +22,8 @@ public class WeighingListener {
         this.weighingService = weighingService;
         this.payloadDeliveryService = payloadDeliveryService;
     }
-
-
-    // TODO add validation input
+    
+    
     @RabbitListener(queues = "#{@rabbitConfig.getQueueWeighbridge()}")
     public void addWeighing(WeighingOperationDto weighingOperationDto) {
         weighingService.addWeighing(weighingOperationDto.getLicensePlate(), weighingOperationDto.getTimestamp(), weighingOperationDto.getWeight());

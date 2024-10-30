@@ -15,8 +15,7 @@ public class WeighingOperationDto {
 
     @NotNull
     private final LocalDateTime timestamp;
-
-    // TODO add validation MIN MAX
+    
     private final double weight;
 
     public WeighingOperationDto(String licensePlate, LocalDateTime timestamp, double weight) {
