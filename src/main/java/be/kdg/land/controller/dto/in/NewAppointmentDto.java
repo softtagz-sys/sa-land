@@ -3,9 +3,11 @@ package be.kdg.land.controller.dto.in;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Setter
 @Getter
 public class NewAppointmentDto {
     @NotBlank(message = "You must provide a customer name")

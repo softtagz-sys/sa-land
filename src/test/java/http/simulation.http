@@ -1,0 +1,64 @@
+### USE THE MVC to CREATE A NEW APPOINTMENT
+
+POST localhost:8080/appointment HTTP/1.1
+Host: localhost
+Content-Type: application/x-www-form-urlencoded
+
+
+customerName=Desmet+NV&rawMaterial=Gips&licensePlate=FPQ-520&simulatedTimeOfRegistration=2024-10-16T07%3A07
+
+
+### ENTER TERRAIN
+POST localhost:8080/api/passages
+Content-Type: application/json
+Accept: application/json
+
+{
+  "licensePlate": "1-FOX-999",
+  "arrivalTime": "2024-11-02T14:12:00",
+  "incoming": true
+}
+
+### AT WEIGHBRIDGE
+POST http://localhost:15672/api/exchanges/%2F/warehouse-exchange/publish
+Authorization: Basic user password
+Content-Type: application/json
+
+{
+  "properties": {},
+  "routing_key": "weighbridge.test",
+  "payload": "{\"licensePlate\":\"1-FOX-999\",\"timestamp\":\"2024-11-02T14:15:30\",\"weight\":\"25\"}",
+  "payload_encoding": "string"
+}
+
+### AT CONVEYERBELT
+POST localhost:8080/api/deliveries
+Content-Type: application/json
+Accept: application/json
+
+{
+  "licensePlate": "1-FOX-999"
+}
+
+### AT WEIGHBRIDGE
+POST http://localhost:15672/api/exchanges/%2F/warehouse-exchange/publish
+Authorization: Basic user password
+Content-Type: application/json
+
+{
+  "properties": {},
+  "routing_key": "weighbridge.test",
+  "payload": "{\"licensePlate\":\"1-FOX-999\",\"timestamp\":\"2024-11-02T08:25:30\",\"weight\":\"15\"}",
+  "payload_encoding": "string"
+}
+
+### EXIT TERRAIN
+POST localhost:8080/api/passages
+Content-Type: application/json
+Accept: application/json
+
+{
+  "licensePlate": "1-FOX-999",
+  "arrivalTime": "2024-11-02T14:49:00",
+  "incoming": false
+}
